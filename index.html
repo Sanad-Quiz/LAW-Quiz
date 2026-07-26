@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حقوق الإنسان — اختبار تفاعلي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --ink:#1c2b3a;
+  --navy:#16233a;
+  --navy-deep:#0f1826;
+  --parchment:#f6f1e4;
+  --parchment-card:#fffdf7;
+  --gold:#b6862c;
+  --gold-soft:#e4c992;
+  --good:#2f6b46;
+  --good-bg:#e7f2ea;
+  --bad:#a13f3f;
+  --bad-bg:#f7e9e8;
+  --muted:#6b6455;
+  --line:#e3dac4;
+  --radius:14px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(1200px 600px at 15% -10%, #24395c 0%, transparent 60%),
+    radial-gradient(1000px 500px at 110% 10%, #24395c 0%, transparent 55%),
+    var(--navy);
+  color:var(--ink);
+  font-family:'Cairo', sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:28px 16px 60px;
+}
+
+.app{
+  width:100%;
+  max-width:760px;
+}
+
+/* ---------- Header strip ---------- */
+.masthead{
+  text-align:center;
+  color:var(--parchment);
+  margin-bottom:22px;
+}
+.masthead .eyebrow{
+  font-size:12.5px;
+  letter-spacing:.12em;
+  color:var(--gold-soft);
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.masthead h1{
+  font-family:'Markazi Text', serif;
+  font-size:40px;
+  font-weight:700;
+  margin:0 0 4px;
+  letter-spacing:.01em;
+}
+.masthead .sub{
+  color:#c7d0de;
+  font-size:14.5px;
+  font-weight:400;
+}
+
+/* ---------- Card ---------- */
+.card{
+  background:var(--parchment-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 18px 40px -18px rgba(10,17,30,.55), 0 2px 0 rgba(182,134,44,.15) inset;
+  padding:30px 28px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:5px;
+  background:linear-gradient(90deg, var(--gold), var(--gold-soft), var(--gold));
+}
+
+/* ---------- Emblem (signature element) ---------- */
+.emblem{
+  width:64px;height:64px;margin:0 auto 14px;
+  display:block;
+}
+
+/* ---------- Start screen ---------- */
+.stat-row{
+  display:flex;
+  gap:14px;
+  margin:22px 0 26px;
+  flex-wrap:wrap;
+}
+.stat-box{
+  flex:1;
+  min-width:200px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px 16px;
+  background:#fbf8ef;
+}
+.stat-box .num{
+  font-family:'Markazi Text', serif;
+  font-size:30px;
+  font-weight:700;
+  color:var(--navy);
+  line-height:1.1;
+}
+.stat-box .label{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:4px;
+  line-height:1.5;
+}
+.stat-box.graded{border-inset-color:var(--good);}
+.stat-box .tag{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:20px;
+  margin-top:8px;
+}
+.tag.good{background:var(--good-bg); color:var(--good);}
+.tag.warn{background:#f6ecd8; color:#8a6212;}
+
+.notice{
+  background:#f6ecd8;
+  border:1px solid var(--gold-soft);
+  border-radius:10px;
+  padding:14px 16px;
+  font-size:13.5px;
+  line-height:1.9;
+  color:#5c4a1e;
+  margin-bottom:22px;
+}
+.notice b{color:#3d3011;}
+
+.home-link{
+  display:inline-flex; align-items:center; gap:6px;
+  color:#c7d0de; text-decoration:none; font-size:13px;
+  font-weight:600; margin-bottom:16px; opacity:.85;
+}
+.home-link:hover{color:var(--gold-soft);}
+
+.btn-group{display:flex; flex-direction:column; gap:10px;}
+.btn{
+  display:block;
+  width:100%;
+  text-align:center;
+  padding:15px 18px;
+  border-radius:10px;
+  border:none;
+  font-family:'Cairo',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .12s ease, box-shadow .12s ease, background .15s ease;
+}
+.btn-primary{
+  background:linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color:var(--parchment);
+  box-shadow:0 10px 24px -10px rgba(15,24,38,.55);
+}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-row{display:flex; gap:10px;}
+.btn-secondary{
+  flex:1;
+  background:#fff;
+  color:var(--navy);
+  border:1.5px solid var(--line);
+  font-size:14.5px;
+  padding:12px 10px;
+}
+.btn-secondary:hover{border-color:var(--gold);}
+
+/* ---------- Quiz screen ---------- */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:var(--parchment);
+  margin-bottom:10px;
+  font-size:13px;
+}
+.topbar .counter{font-weight:700; color:#fff;}
+.topbar .section-label{color:var(--gold-soft); font-weight:700;}
+.progress-track{
+  height:7px;
+  background:rgba(255,255,255,.15);
+  border-radius:20px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold-soft), var(--gold));
+  border-radius:20px;
+  transition:width .25s ease;
+}
+
+.kind-pill{
+  display:inline-block;
+  font-size:11.5px;
+  font-weight:800;
+  padding:3px 12px;
+  border-radius:20px;
+  margin-bottom:14px;
+}
+.kind-pill.tf{background:var(--good-bg); color:var(--good);}
+.kind-pill.mc{background:#eee3f5; color:#6a3f96;}
+
+.group-context{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+.prompt{
+  font-family:'Markazi Text', serif;
+  font-size:23px;
+  font-weight:600;
+  line-height:1.65;
+  color:var(--navy);
+  margin-bottom:22px;
+}
+
+.options{display:flex; flex-direction:column; gap:10px;}
+.option{
+  text-align:right;
+  padding:14px 16px;
+  border-radius:10px;
+  border:1.5px solid var(--line);
+  background:#fff;
+  font-family:'Cairo',sans-serif;
+  font-size:15.5px;
+  font-weight:600;
+  color:var(--ink);
+  cursor:pointer;
+  transition:all .12s ease;
+  line-height:1.6;
+}
+.option:hover:not(.locked){border-color:var(--gold); background:#fffaf0;}
+.option.selected{border-color:var(--navy); background:#eef1f6;}
+.option.correct{border-color:var(--good); background:var(--good-bg); color:#204a30;}
+.option.incorrect{border-color:var(--bad); background:var(--bad-bg); color:#6e2a2a;}
+.option.dim{opacity:.55;}
+.option.locked{cursor:default;}
+
+.feedback{
+  margin-top:16px;
+  padding:13px 16px;
+  border-radius:10px;
+  font-size:14px;
+  line-height:1.85;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.good{background:var(--good-bg); color:#204a30; border:1px solid #bfdcc7;}
+.feedback.bad{background:var(--bad-bg); color:#6e2a2a; border:1px solid #e6c3c1;}
+.feedback.neutral{background:#f6ecd8; color:#5c4a1e; border:1px solid var(--gold-soft);}
+
+.nav-row{
+  display:flex;
+  gap:10px;
+  margin-top:22px;
+}
+.nav-btn{
+  padding:12px 20px;
+  border-radius:9px;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:14.5px;
+  border:1.5px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  cursor:pointer;
+}
+.nav-btn.primary{
+  background:var(--navy);
+  color:var(--parchment);
+  border-color:var(--navy);
+  flex:1;
+}
+.nav-btn:disabled{opacity:.4; cursor:not-allowed;}
+.nav-btn.finish{border-color:var(--bad); color:var(--bad);}
+
+.jump-row{
+  display:flex; align-items:center; gap:8px;
+  margin-top:14px; font-size:12.5px; color:var(--muted);
+}
+.jump-row input{
+  width:60px; padding:6px 8px; border-radius:6px; border:1px solid var(--line);
+  font-family:'Cairo',sans-serif; text-align:center;
+}
+.jump-row button{
+  border:1px solid var(--line); background:#fff; border-radius:6px;
+  padding:6px 10px; cursor:pointer; font-family:'Cairo',sans-serif; font-size:12.5px;
+}
+
+/* ---------- Results ---------- */
+.score-hero{
+  text-align:center;
+  padding:10px 0 24px;
+}
+.score-ring{
+  width:150px;height:150px;
+  margin:0 auto 14px;
+  position:relative;
+}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring .center{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.score-ring .num{
+  font-family:'Markazi Text', serif;
+  font-size:34px; font-weight:700; color:var(--navy);
+}
+.score-ring .pct{font-size:12px; color:var(--muted); font-weight:700;}
+
+.score-caption{font-size:14.5px; color:var(--muted); margin-bottom:4px;}
+.score-caption b{color:var(--navy);}
+
+.divider{
+  border:none; border-top:1px dashed var(--line); margin:24px 0;
+}
+
+.review-item{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px 16px;
+  margin-bottom:10px;
+  background:#fffdf7;
+}
+.review-item .q{font-weight:700; font-size:14.5px; margin-bottom:8px; line-height:1.7;}
+.review-item .row{font-size:13.5px; margin-bottom:4px; line-height:1.7;}
+.review-item .row.your{color:var(--bad);}
+.review-item .row.correct{color:var(--good);}
+.review-item .expl{font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.8;}
+
+.section-title{
+  font-family:'Markazi Text', serif;
+  font-size:20px; font-weight:700; color:var(--navy);
+  margin:0 0 14px;
+}
+
+.mc-note{
+  font-size:13px; color:var(--muted); line-height:1.9;
+  background:#f6ecd8; border:1px solid var(--gold-soft); border-radius:10px;
+  padding:12px 14px; margin-bottom:16px;
+}
+
+.hidden{display:none !important;}
+
+footer.credit{
+  text-align:center; color:#8b96a8; font-size:11.5px; margin-top:18px;
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+
+  <div class="masthead">
+    <svg class="emblem" viewBox="0 0 64 64" fill="none">
+      <line x1="32" y1="8" x2="32" y2="46" stroke="#e4c992" stroke-width="2"/>
+      <line x1="10" y1="16" x2="54" y2="16" stroke="#e4c992" stroke-width="2"/>
+      <path d="M10 16 L4 30 A8 8 0 0 0 20 30 Z" stroke="#e4c992" stroke-width="1.6" fill="none"/>
+      <path d="M54 16 L48 30 A8 8 0 0 0 64 30 Z" stroke="#e4c992" stroke-width="1.6" fill="none"/>
+      <rect x="20" y="46" width="24" height="4" rx="1.5" fill="#e4c992"/>
+      <rect x="30" y="6" width="4" height="4" rx="1" fill="#e4c992"/>
+    </svg>
+    <div class="eyebrow">Law 107 &middot; اعداد الطالب جعفر السبع</div>
+    <h1>حقوق الإنسان</h1>
+    <div class="sub">اختبار تفاعلي ذاتي لمراجعة المادة</div>
+  </div>
+
+  <!-- START SCREEN -->
+  <div class="card" id="screen-start">
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="num" id="stat-tf-count">388</div>
+        <div class="label">سؤال (صح/خطأ + اختيار من متعدد)<br>مصحّحة تلقائياً بالكامل</div>
+        <span class="tag good">مُصحَّحة</span>
+      </div>
+      <div class="stat-box">
+        <div class="num" id="stat-mc-count">1</div>
+        <div class="label">سؤال واحد فقط<br>بدون تظليل واضح في الأصل</div>
+        <span class="tag warn">للمراجعة فقط</span>
+      </div>
+    </div>
+
+    <div class="notice">
+      <b>ملاحظة:</b> بعد مراجعتك، أعدت فحص ملف الـ PDF بدقة على مستوى البكسل ووجدت أن الإجابات الصحيحة كانت بالفعل مُظلَّلة باللون الأصفر في النسخة الأصلية (تظليل مرسوم داخل محتوى الصفحة، وليس كطبقة تعليقات عادية، لهذا لم يظهر في الفحص الأول). استخرجت موقع كل تظليل وطابقته مع كل خيار إجابة، وتحققت من النتائج مقابل التصحيحات النصية المكتوبة بين الأقواس — 388 من أصل 389 سؤالاً أصبح له إجابة مؤكدة بثقة عالية. سؤال واحد فقط (رقم 174) لم يظهر عليه أي تظليل واضح في الملف الأصلي.
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="startQuiz('all')">ابدأ الاختبار الكامل (389 سؤال)</button>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="startQuiz('tf')">صح / خطأ فقط (279)</button>
+        <button class="btn btn-secondary" onclick="startQuiz('mc')">اختيار من متعدد فقط (110)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="hidden">
+    <div class="topbar">
+      <span class="section-label" id="quiz-mode-label">الاختبار الكامل</span>
+      <span class="counter"><span id="q-index">1</span> / <span id="q-total">389</span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card">
+      <span class="kind-pill" id="kind-pill">صح / خطأ</span>
+      <div class="group-context hidden" id="group-context"></div>
+      <div class="prompt" id="q-prompt"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback"></div>
+
+      <div class="nav-row">
+        <button class="nav-btn" id="btn-prev" onclick="goPrev()">السابق</button>
+        <button class="nav-btn primary" id="btn-next" onclick="goNext()" disabled>التالي</button>
+      </div>
+      <div class="jump-row">
+        <button onclick="finishQuiz()" style="color:#a13f3f;border-color:#e6c3c1;">إنهاء وعرض النتيجة</button>
+        <span style="flex:1"></span>
+        <span>الانتقال إلى سؤال رقم</span>
+        <input type="number" id="jump-input" min="1">
+        <button onclick="jumpTo()">اذهب</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" class="hidden">
+    <div class="card">
+      <div class="score-hero">
+        <div class="score-ring">
+          <svg width="150" height="150">
+            <circle cx="75" cy="75" r="66" stroke="#ece6d4" stroke-width="12" fill="none"/>
+            <circle id="ring-fg" cx="75" cy="75" r="66" stroke="#b6862c" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+          </svg>
+          <div class="center">
+            <div class="num" id="score-num">0/0</div>
+            <div class="pct" id="score-pct">0%</div>
+          </div>
+        </div>
+        <div class="score-caption" id="score-caption">نتيجتك في أسئلة صح / خطأ</div>
+      </div>
+
+      <div id="mc-summary-block" class="mc-note hidden"></div>
+
+      <button class="btn btn-primary" onclick="resetToStart()">إعادة المحاولة</button>
+
+      <hr class="divider">
+      <div id="review-wrong-block">
+        <div class="section-title">مراجعة الإجابات الخاطئة</div>
+        <div id="review-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="credit">مصدر المحتوى: ملخص الطالب جعفر السبع — إشراف د. هنادي عيسى الجودر</footer>
+</div>
+
+<script>
+/* ===== DATA ===== */
+const QUIZ_DATA = [{"id": 1, "qnum": 1, "kind": "mc", "prompt": "حقوق النسان هي:", "options": ["مجموع الحقوق الفردية المحددة في دساتير الدول والقانون الدولي فقط", "مجموع الحقوق الفردية والجماعية المحددة في القانون الوطني فقط", "مجموع الحقوق الفردية والجماعية المحددة في دساتير الدول والقانون الدولي", "كل ما ذكر صحيح"], "correctIndex": 2, "explanation": null}, {"id": 2, "qnum": 2, "kind": "tf", "prompt": "حقوق النسان تحدد العلقة بين الفراد والسلطة داخل الدولة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 3, "qnum": 3, "kind": "tf", "prompt": "لعبت المم المتحدة دورا ً في تفنيد حقوق النسان من خلل معاهدات دولية وإقليمية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لعبت المم المتحدة دورا ً في تقنين حقوق النسان"}, {"id": 4, "qnum": 4, "kind": "tf", "prompt": "إن مصدر التزام الدول بهذه الحقوق بسبب كونها منصوص عليها في دساتيرها أو القانون الدولي", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 5, "qnum": 5, "kind": "tf", "prompt": "تمتع بعض المجموعات بحماية خاصة مثل )المرأة، الطفل، القليات وغيرهم( يعتبر تمييز واخلل بالمساواة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ل يعد اخلل بمبدأ المساواة أو عدم التمييز وذلك بهدف تعزيز مبدأ تكافؤ الفرص"}, {"id": 6, "qnum": 6, "kind": "mc", "prompt": "فلسلة حقوق النسان هي:", "options": ["حقوق طبيعية أصيلة ل تعطى ول تمنح من أحد مصدرها القانون الطبيعي", "حقوق يمنحها حاكم الدولة للمواطنين بهدف المساواة بينهم", "حقوق يمنحها القانون الدولي لجميع البشر بدون استثناء"], "correctIndex": 0, "explanation": null}, {"id": 7, "qnum": 7, "kind": "mc", "prompt": "أبرز النظريات التي تجسد فسلفة حقوق النسان:", "options": ["نظرية الحكم البوية", "نظرية العقد الجتماعي", "نظرية القانون الطبيعي", "الجابة الثانية والثالثة", "نظرية القانون القتصادي"], "correctIndex": 3, "explanation": null}, {"id": 8, "qnum": 8, "kind": "tf", "prompt": "نظرية العقد الجتماعي تؤكد بأن حقوق النسان ولدت معه ويتمتع بها منذ الفطرة الولى", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تؤكد بأن حاجة الفراد للسلطة في تنظيم أمورهم جعلتهم يتنازلون عن قدر من حرياتهم"}, {"id": 9, "qnum": 9, "kind": "tf", "prompt": "القانون الوضعي سابق على القانون الطبعي", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "القانون الطبيعي هو سابق على القانون الوضعي"}, {"id": 10, "qnum": 10, "kind": "mc", "prompt": "حقوق النسان في العصور القديمة", "options": ["الحكم المطلق للحاكم والعتراف ببعض الحقوق للمحكوم", "الشعب مصدر السلطان جميعا", "ل توجد حقوق في العصور القديمة بل بدأت بعد العصور الوسطى"], "correctIndex": 0, "explanation": null}, {"id": 11, "qnum": 11, "kind": "tf", "prompt": "في العصور الوسطى كان المجتمع يتحلى بالمساواة وعدم التمييز", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تم تقسيم المجتمع الى طبقات وبسبب ذلك قامت بعض الثورات ومنها ثورة الشعب النجليزي"}, {"id": 12, "qnum": 12, "kind": "tf", "prompt": "كان للديانات السماوية دور مهم في ارساء دعائم حقوق النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 13, "qnum": 13, "kind": "tf", "prompt": "تم تأسيس المم المتحدة واصدار العلن العالمي لحقوق النسان، والتفاقيات الدولية في مجال تعزيز حقوق النسان قبل الحرب العالمية الثانية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بعد اندلع الحرب العالمية الثانية"}, {"id": 14, "qnum": 14, "kind": "tf", "prompt": "قررت 50 دولة ارسال ممثليها مع خططهم الخاصة للسلم والدبلوماسية الى مؤتمر منعقد في موسكو وسمي )مؤتمر موسكو(", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "في فرانسيسكو واطلق عليه مؤتمر فرانسيسكو"}, {"id": 15, "qnum": 15, "kind": "mc", "prompt": "جميع ما يلي يعتبر من المور المترتبة على مؤتمر سان فرانسيسكو ما عدا:", "options": ["نشأة المم المتحدة", "صدور ميثاق المم المتحدة", "التفاق على ان الشعوب هي مصدر السطات"], "correctIndex": 2, "explanation": null}, {"id": 16, "qnum": 16, "kind": "mc", "prompt": "اطلق على المحكمة الدولية التابعة للمم المتحدة", "options": ["محكمة العدل الدولي", "محكمة فرانسيسكو", "محكمة المم المتحدة", "المحكمة الدولية العامة"], "correctIndex": 0, "explanation": null}, {"id": 17, "qnum": 17, "kind": "mc", "prompt": "في عام 2006 تم تشكيل", "options": ["مجلس حقوق النسان", "ميثاق المم المتحدة", "اصدار العلن العالمي لحقوق النسان"], "correctIndex": 0, "explanation": null}, {"id": 18, "qnum": 18, "kind": "tf", "prompt": "في عام 1948 تم اصادر العلن العالمي لحقوق النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 19, "qnum": 19, "kind": "mc", "prompt": "يتكون عدد الجمعية العامة للمم المتحدة من:", "options": ["192 عضو", "100 عضو", "58 عضو"], "correctIndex": 0, "explanation": null}, {"id": 20, "qnum": 20, "kind": "tf", "prompt": "يتكون مجلس المن من 5 أعضاء دائمين ويتمتعون بحق الفيتو", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 21, "qnum": 21, "kind": "mc", "prompt": "جميع ما يلي من أهداف المم المتحدة ما عدا:", "options": ["نشر مبادئ حقوق النسان والحريات الساسية في العالم", "رعاية حقوق النسان والحريات", "وضع قانون من شأنها احكام السيطرة على الدول لحفظ حقوق النسان"], "correctIndex": 2, "explanation": null}, {"id": 22, "qnum": 22, "kind": "mc", "prompt": "تم تقسم حقوق النسان إلى", "options": ["اساسية وغير اساسية", "فردية و جماعية", "كل ما ذكر صحيح", "المدنية والسياسية - والقتصادية والجتماعية - و التضامن"], "correctIndex": 2, "explanation": null}, {"id": 23, "qnum": 23, "kind": "tf", "prompt": "يقصد بالحقوق الساسية هي حقوق لزمة لحياة النسان ول تحتاج الى قانون وضعي لقراره", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 24, "qnum": 24, "kind": "tf", "prompt": "يقصد بحقوق النسان الغير اساسية هي الحقوق الملزمة لحياة النسان والمرتبطة برفاهيته وسعادته مثل حرية تكوين النقابات والحقوق البيئية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 25, "qnum": 25, "kind": "tf", "prompt": "يقصد بالحقوق الفردية هي الحقوق التي يتمتع بها المجتمع كالحق في تقرير المصير وحق التجمع السلمي وحق تشكيل النقابات", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "التعريف المذكور للحقوق الجماعية أما الفردية فهي التي يتمتع بها الفرد بذاته كالحق في الحياة وحرية الرأي والتعبير ... الخ"}, {"id": 26, "qnum": 26, "kind": "tf", "prompt": "يقصد بالحقوق المدنية والساسية هي التي ترتبط بالحريات الملزمة لكل فرد ول يمكن الستغناء عنها )حق الحياة، حق المن والتنقل والجنسية(", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 27, "qnum": 27, "kind": "tf", "prompt": "يقصد بالحقوق الجتماعية والثقافية، الحقوق التي يتمتع بها الفراد في اطار علقتهم بالمجتمع ومرتبطة بعملية التننمية )الحق في التعليم والصحة والعمل والضمان الجتماعي(", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 28, "qnum": 28, "kind": "tf", "prompt": "يقصد بالتضامن هي تلك الحقوق التي تثبت للفراد بشكل مستقل عن الجماعات", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يقصد بها الحقوق التي تثبت للجماعات بشكل مستقل عن الفراد كالحق في بيئة نظيفة والحق في السلم"}, {"id": 29, "qnum": 29, "kind": "mc", "prompt": "كل ما يلي من مصادر حقوق النسان الدولية العالمية العامة ماعدا :", "options": ["وثيقة دبي لحقوق النسان سنة 1450", "ميثاق المم المتحدة عام 1945", "العلن العالمي لحقوق النسان المصدق عليه عام1948", "العهد الول الخاص بالحقوق المدينة والعهد الثاني الخاص بالحقوق القتصادية والجتماعية والثقافية", "البروتوكلت الملحقة بالعهدين الدوليين"], "correctIndex": 0, "explanation": null}, {"id": 30, "qnum": 30, "kind": "tf", "prompt": "البرتوكول هو اجراء يتناول مسائل تبعية للتفاقية أو المعاهدة الملحق به والذي يستمد قوته القانونية منها ويخضع لكل المراحل التي تمر بها التفاقية والمعاهدة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 31, "qnum": 31, "kind": "tf", "prompt": "يعتبر الميثاق بمثابة معاهدة دولية جماعية توافقت فيها إرادة الدول العضاء في المجتمع الدولي على تحديد قواعد القانون الدولي التي تحكم العلقات فيما بينها في مواضيع مختلفة من ضمنها حقوق النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 32, "qnum": 32, "kind": "tf", "prompt": "تمت الشارة الى حقوق النسان في ميثاق المم المتحدة فقط في مقدمته", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تم الشارة اليه في مقدمته وفي الديباجة وفي 6 مواد مختلفة فيه"}, {"id": 33, "qnum": 33, "kind": "tf", "prompt": "وضع الميثاق مفهوما لحقوق النسان بالمعني الفني الدقيق", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ساهم في تقنين حقوق النسان دوليا وجعلها ملزمة"}, {"id": 34, "qnum": 34, "kind": "tf", "prompt": "امتنعت مملكة البحرين عن التزامها بميثاق المم المتحدة عند انضمامها لهيئة المم المتحدة لما لها من ملحظات على الميثاق", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "أعلنت مملكة البحرين التزامها بميثاق المم المتحدة عند انضمامها لهيئة المم المتحدة"}, {"id": 35, "qnum": 35, "kind": "tf", "prompt": "من المصادر الدولية العالمية العامة لحقوق النسان العلن العالمي لحقوق النسان 1948", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 36, "qnum": 36, "kind": "tf", "prompt": "تم التصويت على العلن العالمي لحقوق النسان من كافة الدول دون امتناع", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "امتنعت 8 دول وغابت دولتان هما الهند واليمن"}, {"id": 37, "qnum": 37, "kind": "mc", "prompt": "من اسباب امتناع بعض الدول عن التصويت على العلن العالمي لحقوق النسان", "options": ["خشية الدول من تدخل المم المتحدة في شؤونها الداخلية باسم حقوق النسان", "تطبيق حقوق النسان بشكل فعلي", "عدم مطابقته مع الميثاق", "عدم صياغته من الدول العضاء"], "correctIndex": 0, "explanation": null}, {"id": 38, "qnum": 38, "kind": "mc", "prompt": "تنقسم الحقوق الواردة في العلن العالمي لحقوق النسان الى:", "options": ["حقوق شخصية، حقوق متصلة بحالة الشخص، الحريات العامة والسياسية، الحقوق القتصادية والجتماعية والثقافية", "حقوق جماعية، حقوق ترفيهية، حقوق شخصية، حقوق السلطة", "حقوق شخصية، حقوق متصلة بحالة الشخص، حقوق تجارية، حقوق سكنية، حقوق دينية"], "correctIndex": 0, "explanation": null}, {"id": 39, "qnum": 39, "kind": "mc", "prompt": "من الحقوق المتصلة بحالة الشخص المتضمنة في العلن العالمي لحقوق النسان", "options": ["حق حرية الفكر والضمير والدين", "حق التنقل والقامة", "حق العمل وحق التعليم", "حق الجنسية، حق الزواج وتكوين السرة، حق التملك"], "correctIndex": 3, "explanation": null}, {"id": 40, "qnum": 40, "kind": "mc", "prompt": "من الحقوق الشخصية المتضمنة في العلن العالمي لحقوق النسان", "options": ["حرية التنقل والقامة وعدم الخضوع والتعذيب", "حق العمل وحق التعليم", "حرية الفكر والضمير والدين وحرية الرأي والتعبير"], "correctIndex": 0, "explanation": null}, {"id": 41, "qnum": 41, "kind": "mc", "prompt": "من الحقوق القتصادية والجتماعية والثقافية المتضمنة في العلن العالمي لحقوق النسان", "options": ["حق العمل وحق التعليم والحق في الملكية الفكرية والدبية", "حرية الفكر والضمير والدين وحرية الرأي والتعبير", "حرية التنقل والقامة وعدم الخضوع والتعذيب", "حق الزواج والجنسية وتكوين السرة والحق في التملك"], "correctIndex": 0, "explanation": null}, {"id": 42, "qnum": 42, "kind": "mc", "prompt": "من الحريات العامة والسياسية المتضمنة في العلن العالمي لحقوق النسان", "options": ["حرية الفكر والضمير والدين وحرية الرأي والتعبير", "حق العمل وحق التعليم وحق الملكية الفكرية", "حرية التنقل والقامة وعدم الخضوع والتعذيب"], "correctIndex": 0, "explanation": null}, {"id": 43, "qnum": 43, "kind": "mc", "prompt": "اختلف الفقه في القيمة القانونية للعلن بين", "options": ["التجاه الموضوعي والتجاه الشكلي", "التجاه المستفيض والتجاه الصريح", "التجاه السياسية والتجاه القتصادي"], "correctIndex": 0, "explanation": null}, {"id": 44, "qnum": 44, "kind": "tf", "prompt": "ذهب الرأي الول )التجاه الموضوعي( للقيمة القانونية للعلن الى أن العلن غير ملزم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "العلن ملزم باعتباره مكمل لميثاق المم المتحدة ويشكل التزامات عرفية ودستورية للكثير من الدول"}, {"id": 45, "qnum": 45, "kind": "tf", "prompt": "التجاه الثاني )التجاه الشكلي( للقيمة القانونية للعلن ذهب الى أن العلن غير ملزم حيث صدر العلن في شكل توصية من الجمعية العامة وتوصيات الجمعية غير ملزمة وليس لها إل قيمة أدبية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 46, "qnum": "46.1", "kind": "tf", "group": "ضع صح أو خطأ على العبارات التالية", "prompt": "العلن العالمي لحقوق النسان له اثر قوي في كافة أنحاء العالم", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 47, "qnum": "46.2", "kind": "tf", "group": "ضع صح أو خطأ على العبارات التالية", "prompt": "العلن العالمي لحقوق النسان وفر الفلسفة التاريخية لكل التفاقيات وفصلت الحقوق الواردة فيه", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 48, "qnum": "46.3", "kind": "tf", "group": "ضع صح أو خطأ على العبارات التالية", "prompt": "تمكنت بعض الدول من احكام سلطة القمع استنادا لنصوص العلن العالمي", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 49, "qnum": "46.4", "kind": "tf", "group": "ضع صح أو خطأ على العبارات التالية", "prompt": "لم يكن له تأثير على الدساتير الوطنية والتشريعية الداخلية", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 50, "qnum": "46.5", "kind": "tf", "group": "ضع صح أو خطأ على العبارات التالية", "prompt": "العلن العالمي لحقوق النسان وضع أول تفسير رسمي لمصطلح حقوق النسان", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 51, "qnum": 47, "kind": "tf", "prompt": "مصادقة عددا كبيرا من الدول على العهدين الدوليين يعد دليل على أنهما باتا من الركائز والدعائم الساسية لحقوق النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 52, "qnum": 48, "kind": "tf", "prompt": "كل الدول تمتثل للتزامها بتقديم تقارير دورية وتقدمها في الوقت المحدد", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بعض الدول ل تمتثل"}, {"id": 53, "qnum": 49, "kind": "tf", "prompt": "يساهم العهدان الدوليان في تكريس وتعزيز المبادئ الواردة في العلن العالمي لحقوق النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 54, "qnum": 50, "kind": "tf", "prompt": "المحاكم الوطنية في مختلف الدول تقوم بتطبيق الحقوق المنصوص عليها في العهدين مباشرة استنادا الى العهدين فقط", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "إما مباشرة استنادا الى العهدين أو من خلل تطبيق قوانين وطنية تتضمن تلك الحقوق المحمية في العهدين"}, {"id": 55, "qnum": 51, "kind": "mc", "prompt": "جميع ما يلي يعتبر من البروتوكولت الملحقة بالعهدين ما عدا؟", "options": ["البروتوكول الختياري الول المتعلق بتقديم شكاوى من قبل الفراد", "البروتوكول الختياري الثاني المتعلق بإلغاء عقوبة العدام", "البروتوكول الختياري للعهد الثاني بشأن أحقية اللجنة المعنية بمراقبة تنفيذ العهد بتلقي البلغات والتحقيق والتحري والتعويض", "البروتوكول الختياري الول المتعلق بتقديم الشكاوى من قبل الجماعات"], "correctIndex": 3, "explanation": null}, {"id": 56, "qnum": "52.1", "kind": "tf", "group": "ضع عبارة )صح( أو )خطأ( امام الجمل التالية", "prompt": "البروتوكول الختياري الول المتعلق بتقديم شكاوى من قبل الفراد ملحق بالعهد الثاني", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 57, "qnum": "52.2", "kind": "tf", "group": "ضع عبارة )صح( أو )خطأ( امام الجمل التالية", "prompt": "البروتوكول الختياري الثاني المتعلق بعقوبة العدام ملحق بالعهد الول الخاص بالحقوق المدنية والسياسية", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 58, "qnum": "52.3", "kind": "tf", "group": "ضع عبارة )صح( أو )خطأ( امام الجمل التالية", "prompt": "البروتوكول الختياري بشأن أحقية اللجنة المعنية بمراقبة تنفيذ العهد بتلقي البلغات والتحقيق والتحري ملحق بالعهد الثاني الخاص بالحقوق المدنية والسياسية", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 59, "qnum": 53, "kind": "mc", "prompt": "كل ما يلي يعد من الحكام المشتركة بين العهدين ما عدا", "options": ["يقوم العهدان الدوليان على فكرة تدويل الحقوق المدرجة فيهما", "التداخل النوعي للحقوق فيما يخص الحقوق الجتماعية", "التأكيد على حق الشعب في تقرير المصير", "كل العهدين يشجعان على خفض حقوق النسان الى المستوى الدنى من الحقوق لتطبيقها", "السريان الفقي والرأسي لحكام حقوق النسان"], "correctIndex": 3, "explanation": null}, {"id": 60, "qnum": 54, "kind": "mc", "prompt": "كل ما يلي يعد من الحكام المشتركة بين العهدين ما عدا", "options": ["كل العهدين يتضمن نظام مراقبة مدى احترام الدول الطراف لحكامه", "يشترك العهدان في اجزاء من احكامهما الموضوعية ويعد جزء من الحقوق المحمية من قبيل الحكام العرفية", "ينص كل العهدين على النسحاب من التفاقية بشروط واضحة وصريحة", "يشترك العهدان في الهدف وهو الكرامة النسانية", "استخدام الفاظ وعبارات تتصف بالعمومية وبعدم الدقة او التحديد في عدد من الحالت"], "correctIndex": 2, "explanation": null}, {"id": 61, "qnum": "55.1", "kind": "tf", "group": "ضع علمة صح او خطأ أمام العبارات التالية:", "prompt": "يستند العهدان على حق الشعوب في تقرير المصير", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 62, "qnum": "55.2", "kind": "tf", "group": "ضع علمة صح او خطأ أمام العبارات التالية:", "prompt": "الدول الطراف في العهدين ملزمة باحترام الحقوق المحمية في العهدين مع الشخاص فقط وهذا يعني السريان الرأسي وغير مكلفة بالسريان الفقي", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 63, "qnum": "55.3", "kind": "tf", "group": "ضع علمة صح او خطأ أمام العبارات التالية:", "prompt": "العهد الدولي الخاص بالحقوق المدنية والسياسية منفصلة تماما عن الحقوق الجماعية", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 64, "qnum": "55.4", "kind": "tf", "group": "ضع علمة صح او خطأ أمام العبارات التالية:", "prompt": "يخلو كل من العهدين من نص يتناول حق النسحاب منها", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 65, "qnum": "55.5", "kind": "tf", "group": "ضع علمة صح او خطأ أمام العبارات التالية:", "prompt": "تتصف جميع العبارات والمصطلحات والفاظ بالخصوصية والدقة والتحديد لتجنب الخلف بين الدول ولضمان التفاق على العهدين", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 66, "qnum": 56, "kind": "tf", "prompt": "صادقت البحرين على البروتوكولين المرفقين بالعهدين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "فقط أبدت ملحظاتها على توصيات المراجعة الدورية الشاملة في العام 2012 بخصوص الغاء عقوبة العدام"}, {"id": 67, "qnum": 57, "kind": "mc", "prompt": "سبب معارضة أو ملحظات البحرين بخصوص البروتوكول المعني بإلغاء عقوبة العدام", "options": ["لنه يتعارض مع سياسة البحرين الرامية الى تطبيق العدام متى ما أراد الحكم", "يتعارض مع قانون العقوبات الذي يقضي بتطبيق عقوبة العدام في حال الجرائم الخطيرة ويتعارض مع الشريعة السلمية", "يتعارض مع قانون العقوبات الذي يقضي بتطبيق عقوبة العدام فقط"], "correctIndex": 1, "explanation": null}, {"id": 68, "qnum": 58, "kind": "mc", "prompt": "من الشروط التي يستفيد الفراد من البروتوكول الختياري الول المتعلق بتقديم شكاوى من قبل الفراد:", "options": ["أن تكون دولتهم طرفا مصدقا أو منظما للبروتوكول", "أن تكون الشكوى اما شفوية أو مكتوبة", "ان تكون الشكوى محل دراسة بشكل فعلي من قبل أي هيئة أخرى دولية من هيئات التحقيق أو التسوية الدولية", "أن ل يكون المعني قد استنفذ كل طرق التظلم المتاحة محليا"], "correctIndex": 0, "explanation": null}, {"id": 69, "qnum": 59, "kind": "mc", "prompt": "تلتزم الدول الموقعة على البروتوكول الختياري الثاني المتعلق بإلغاء عقوبة العدام ما عدا:", "options": ["عدم اعدام أي شخص خاضع للولية القضائية لدولة طرف في هذا البروتوكول", "تتم عقوبة العدام علنية وتحت مرأى الشعب وتحت مراقبة من لجنة حقوق النسان", "تتخذ كل دولة طرف جميع التدابير اللزمة للغاء عقوبة العدام داخل نطاق وليتها القضائية"], "correctIndex": 1, "explanation": null}, {"id": 70, "qnum": 60, "kind": "mc", "prompt": "المصادر الوطنية الساسية لحقوق النسان في مملكة البحرين", "options": ["وزارة العمل والشؤون الجتماعية", "الدستور البحريني وميثاق العمل الوطني", "القانون الدولي"], "correctIndex": 1, "explanation": null}, {"id": 71, "qnum": 61, "kind": "tf", "prompt": "في عام 1971 اصدر المير بيانا رسميا ابدى فيه رغبته في تكليف وزير العدل بوضع مشروع مسودة الدستور", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تكليف رئيس الوزراء"}, {"id": 72, "qnum": 62, "kind": "tf", "prompt": "اللجنة التحضيرية لعداد مسودة الدستور تكونت من 4 وزراء", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 73, "qnum": 63, "kind": "tf", "prompt": "بعد انتهاء اللجنة المشكلة لعداد مسودة الدستور أصدر المير سلمان بن عيسى آل خليفة مرسوما بقانون رقم 12 لسنة 1972 بشأن إنشاء مجلس تأسيسي لعداد دستور البلد", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "المير عيسى بن سلمان آل خليفة"}, {"id": 74, "qnum": 64, "kind": "tf", "prompt": "نصت المادة 1 من المرسوم رقم 12 لسنة 1972 على إنشاء مجلس تأسيسي لوضع مشروع دستور للبلد على أن يتألف من 15 عضوا ينتخبهم الشعب بطريق النتخاب السري المباشر", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "22 عضوا"}, {"id": 75, "qnum": 65, "kind": "tf", "prompt": "ل يحق للوزراء أن يكونوا من ضمن اعضاء المجلس بحكم مناصبهم في دستور 1972", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يكون الوزراء اعضاء بحكم مناصبهم"}, {"id": 76, "qnum": 66, "kind": "mc", "prompt": "تم اقرار اول دستور في", "options": ["6 ديسمبر 1973", "5 فبراير 1973", "16 ديسمبر 1973"], "correctIndex": 0, "explanation": null}, {"id": 77, "qnum": 67, "kind": "mc", "prompt": "نص الدستور على تشكيل مجلس وطني في المادة 43 يتألف من", "options": ["ثلثين عضوا ينتخبون بطريق النتخاب العام السري المباشر", "عشرين عضوا ينتخبون بطريق النتخاب العام العلني المباشر", "ثلثين عضوا ينتخبون بطريق النتخاب العام العلني المباشر", "اربعين عضوا ينتخبون بطريق النتخاب العام السري المباشر"], "correctIndex": 0, "explanation": null}, {"id": 78, "qnum": 68, "kind": "tf", "prompt": "استمر المجلس الوطني حتى تعديله في 2002", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تم حل المجلس الوطني في 1975 بموجب مرسوم اميري وجمد العمل ببعض نصوص الدستور"}, {"id": 79, "qnum": 69, "kind": "tf", "prompt": "تم التصديق على ميثاق العمل الوطني في 14 فبراير 2001 بعد استفتاء الشعب عليه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 80, "qnum": 70, "kind": "tf", "prompt": "وافق المواطنون على ميثاق العمل الوطني بنسبة 70%", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بنسبة 98.4%"}, {"id": 81, "qnum": 71, "kind": "tf", "prompt": "تمت تعديلت على الدستور في 2002 ودعما للديمقراطية وحقوق النسان تم اجراء تعديلت على الدستور في 2012 و 2017", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 82, "qnum": 72, "kind": "mc", "prompt": "حقوق النسان المحمية بموجب الدستور البحريني", "options": ["المدنية – السياسية – الثقافية – القتصادية – الجتماعية", "الجامعية – التعليمية – المدرسية – الثقافية", "المدنية – السياحية – الترفيهية – التجارية – السرية"], "correctIndex": 0, "explanation": null}, {"id": 83, "qnum": 73, "kind": "mc", "prompt": "حقوق التضامن هي", "options": ["الحقوق التي يتمتع بها النسان مع اسرته فقط", "الحقوق التي يتمتع بها النسان ضمنيا مع نفسه", "الحقوق التي يتمتع بها النسان متضامنا مع الخرين وليس منفردا", "الحقوق التي ل تمس حقوق الخرين"], "correctIndex": 2, "explanation": null}, {"id": 84, "qnum": 74, "kind": "tf", "prompt": "حقوق التضامن هي )الحق في التنمية – الحق في السلم – الحق في البيئة(", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 85, "qnum": 75, "kind": "tf", "prompt": "الميثاق هو الثقة المتبادلة بين الحاكم والمحكوم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "الوثيقة التي تحدد الفلسفة والسس والمبادئ والهداف السياسية والجتماعية والقتصادية التي تحكم المجتمع البحريني"}, {"id": 86, "qnum": 76, "kind": "tf", "prompt": "تتكون اللجنة الوطنية العليا لعداد مشروع ميثاق العمل الوطني من 40 عضوا من مختلف شرائح المجتمع", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "48 عضوا"}, {"id": 87, "qnum": 77, "kind": "mc", "prompt": "ما هو الشرط الذي وضعه المير قبل التصديق على الميثاق وما هو السبب", "options": ["ارادة السلطة لما فيه صلح للشعب", "الرادة الشعبية لتفعيل مبدأ الشعب مصدر السلطات", "اجتماع السلطات القضائية والتنفيذية وفق مبدأ العدل والمساواة", "ارادة نخبة من الشعب وموافقة النخبة الدينية لعتبار الدين مصدر السلطات"], "correctIndex": 1, "explanation": null}, {"id": 88, "qnum": 78, "kind": "mc", "prompt": "كل ما يلي من مبررات صدور ميثاق العمل الوطني ماعدا", "options": ["تحقيق النهج الديمقراطي والتأكيد على حقوق الحريات الساسية للمجتمع وعلى مبدأ المساواة ويرسي مزيدا من الضمانات في مجال حقوق النسان", "تعزيز آليات السلطة القضائية", "مواكبة المستجدات العالمية في مجال حقوق النسان", "مساعدة الحكم في استيعاب المشكلت القتصادية الجتماعية من خلل تطوير القتصاد", "ادخال تعديلت دستورية تبني النظام الملكي الديمقراطي، تغيير مسمى البحرين، الخذ بنظام المجلسين"], "correctIndex": 3, "explanation": null}, {"id": 89, "qnum": 79, "kind": "mc", "prompt": "تعريف الحقوق المدنية والسياسية", "options": ["هي حقوق لصيقة بشخص النسان ومرتبطة بحالته المدنية ول تتطلب تدخل الدولة تدخل ايجابيا لضمان التمتع بها", "هي حقوق لصيقة بشخص النسان ومرتبطة بحالته الجتماعية والقتصادية وتحتاج تدخل من الدولة بشكل ايجابي", "حقوق تختلف من مجتمع لخر ويتحدد على موجبها كيفية التعامل بين النسان ومن يحكمه"], "correctIndex": 0, "explanation": null}, {"id": 90, "qnum": 80, "kind": "tf", "prompt": "وردت هذه الحقوق في المواثيق الدولية وفي المصادر الوطنية وفي الشريعة السلمية كمصدر رئيس للتشريع", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 91, "qnum": 81, "kind": "mc", "prompt": "كل مما يلي حقوق مدنية وسياسية ما عدا", "options": ["الحق في الحياة", "الحق في الحرية والمان", "الحقوق القضائية والجرائية", "الحق في العمل والتعليم", "حرية التنقل", "الحرية الدينية"], "correctIndex": 3, "explanation": null}, {"id": 92, "qnum": 82, "kind": "mc", "prompt": "الحق الذي يعتبر شرطا اساسيا للتمتع بكافة حقوق النسان الخرى هو", "options": ["حق التعليم", "حق الحياة", "حق التنقل", "الحقوق السياسية", "حرية التجمع السلمي وتكوين النقابات"], "correctIndex": 1, "explanation": null}, {"id": 93, "qnum": 83, "kind": "tf", "prompt": "اشار الدستور البحريني على حق الحياة بشكل صريح", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "كفل هذا الحق من خلل النص على الحقوق الخرى المؤدية اليه كالحق في الصحة والمن وغيرها"}, {"id": 94, "qnum": 84, "kind": "mc", "prompt": "كل ما يلي يعتبر من الضمانات اللزمة لحماية حق النسان في الحياة ماعدا", "options": ["منع استخدام القوة أو الترويج لها أو التهديد بها", "الحرمان التعسفي من الحق في الحياة", "حظر الختفاء القسري", "تحريم القتل والنتحار والجهاض", "الحد من عقوبة العدام واحاطتها بضمانات خاصة", "تمكين النسان من الحصول على مقومات الحياة"], "correctIndex": 1, "explanation": null}, {"id": 95, "qnum": "85.1", "kind": "tf", "group": "ضع علمة صح او خطأ بجانب العبارات التالية", "prompt": "من واجب الدول منع الحروب واعمال القتل واعمال العنف الجماعي الخرى حتى مع الدفاع عن النفس", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 96, "qnum": "85.2", "kind": "tf", "group": "ضع علمة صح او خطأ بجانب العبارات التالية", "prompt": "نص الدستور البحريني على أن هدف الدولة السلم ومنع الحرب الهجومية واجاز الحرب دفاعا عن النفس", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 97, "qnum": "85.3", "kind": "tf", "group": "ضع علمة صح او خطأ بجانب العبارات التالية", "prompt": "يعاقب قانون العقوبات البحريني على القتل العمد فقط دون القتل الخطأ", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 98, "qnum": "85.4", "kind": "tf", "group": "ضع علمة صح او خطأ بجانب العبارات التالية", "prompt": "الجهاض اذا كان باختيار الزوجين جائز في القانون البحريني", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 99, "qnum": 86, "kind": "mc", "prompt": "يعنى بالحرمان التعسفي", "options": ["في اطار القانون", "خارج اطار القانون", "باختيار الدولة"], "correctIndex": 1, "explanation": null}, {"id": 100, "qnum": 87, "kind": "mc", "prompt": "قد جاء في ) ( ان قوات المن ل تملك حرمان الفراد تعسفيا من حياتهم وأن اللجوء الى القوة القاتلة محكوم بمبدأ التناسب مع الغاية والوضع ذاته، فل يجوز مثل استعمال السلحة النارية ضد الطفال", "options": ["الجمعية العامة للمم المتحدة", "التفاقية الوربية لحقوق النسان", "القانون الخاص بقوات المن في مملكة البحرين"], "correctIndex": 0, "explanation": null}, {"id": 101, "qnum": 88, "kind": "mc", "prompt": "قد أقرت ) ( بحق السلطات العامة داخل الدولة باستخدام القوة المسلحة المميتة أو القاتلة في ظروف محددة بدقة ومحدودة جدا", "options": ["الجمعية العامة للمم المتحدة", "التفاقية الوربية لحقوق النسان", "القانون الخاص بقوات المن في مملكة البحرين"], "correctIndex": 1, "explanation": null}, {"id": 102, "qnum": 89, "kind": "mc", "prompt": "وقد جاء في ) ( لعضاء قوات المن استخدام القوة بشكل عام بشرط ان تستخدم القوة في سبيل تنفيذ واجباتهم، واستخدام القوة بالقدر اللزم لتنفيذ واجباتهم، وان تكون القوة هي الوسيلة الوحيدة لذلك", "options": ["الجمعية العامة للمم المتحدة", "التفاقية الوربية لحقوق النسان", "القانون الخاص بقوات المن في مملكة البحرين"], "correctIndex": 2, "explanation": null}, {"id": 103, "qnum": 90, "kind": "tf", "prompt": "الختفاء القسري هو اختفاء شخص في ظروف غامضة على يد اشخاص أو مجموعات مجهولة وقد سبب ذلك في عدم امكانية معرفة حياة الشخص أو مماته", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 104, "qnum": 91, "kind": "tf", "prompt": "سمح الدستور البحريني في الختفاء القسري فقط للقوات المنية المختصة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "حظر الدستور البحريني الختفاء القسري من خلل بعض النصوص"}, {"id": 105, "qnum": 92, "kind": "mc", "prompt": "المادة 61 من قانون الجراءات جاء فيها", "options": ["ل يجوز القبض على أي انسان إل بأمر من السلطات المختصة بذلك قانونا ويجب معاملته بما يحفظ عليه كرامة النسان ول يجوز ايذاؤه بدنيا او معنويا", "خول للدولة الحق بحبس النسان المتهم والتعامل معه بما تراه مناسبا مطلقا", "تحت بند السرية والتحصيل على العترافات سمح القانون للدولة منع التصال من المتهم بأي طرف"], "correctIndex": 0, "explanation": null}, {"id": 106, "qnum": 93, "kind": "tf", "prompt": "يمكن تفسير الحق في الحياة على أنه الحد من الجرائم المؤدية الى الحرمان من الحياة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يجب ايضا اعتماد الدول التدابير الممكنة لتخفيض الوفيات وزيادة المتوسط العمري"}, {"id": 107, "qnum": 94, "kind": "tf", "prompt": "تطبيق عقوبة العدام على اشد الجرائم خطورة طبقا للقانون المعمول به وقت ارتكاب الجريمة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 108, "qnum": 95, "kind": "tf", "prompt": "يطبق حكم العدام ولو كان بأثر رجعي لنه حكم اصيل ونافذ", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 109, "qnum": 96, "kind": "tf", "prompt": "يجب ان ل تخالف عقوبة العدام احكام العهد الدولي الول ول اتفاقية منع جريمة البادة الجماعية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 110, "qnum": 97, "kind": "tf", "prompt": "يطبق حكم العدام وان صدر في حق المحكوم عليه عفوا عاما أو خاصا لنه حكم نافذ", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 111, "qnum": 98, "kind": "tf", "prompt": "ل يجوز الحكم بالعدام على من تقل اعمارهم عن 18 عام", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 112, "qnum": 99, "kind": "tf", "prompt": "عدم جواز تطبيق العقوبة بشكل قاس أو حاط بالكرامة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 113, "qnum": 100, "kind": "tf", "prompt": "يتم تنفيذ حكم العدام على المرأة الحامل بعد النتهاء من الحمل مباشرة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بعد مرور سنتين من الوضع وذلك احتراما لحقوق الطفل"}, {"id": 114, "qnum": 101, "kind": "tf", "prompt": "الحق في الحرية والمان هي عدم حرمان النسان من حريته مطلقا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "عدم حرمان النسان من حريته بشكل يخالف القانون"}, {"id": 115, "qnum": 102, "kind": "tf", "prompt": "اكد الدستور البحريني بشكل صريح على حق حرية المان فكفل الحرية الشخصية وفقا للقانون", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 116, "qnum": 103, "kind": "tf", "prompt": "ينص قانون العقوبات البحريني على أنه يعاقب بالحبس من قبض على شخص أو حجزه أو حرمه من حريته بأية وسيلة وفقا للقانون", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يعاقب القانون البحريني اذا كان هذا الحبس او القبض بغير وجه قانوني"}, {"id": 117, "qnum": 104, "kind": "mc", "prompt": "من شروط الحرمان من الحرية كل ما يلي ما عدا", "options": ["ان ينص القانون على سبب الحرمان من الحرية بشكل صريح", "ان يتم الحرمان من الحرية وفق الجراءات المقررة في القانون بدون نص قانوني لما تمثله الوزارة من صلحيات خارجة عن القانون", "ان يكون الحرمان بقرار من وزارة الداخلية وان كان", "عدم التعسف في حالت التوقيف"], "correctIndex": 1, "explanation": null}, {"id": 118, "qnum": 105, "kind": "tf", "prompt": "اعتبرت اللجنة المعنية بحقوق النسان ان التوقيف بدون أمر وبدون إبلغ الموقوف بأسباب التوقيف حرمانا مشروعا لما له من سرية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "اعتبرته احتجازا تعسفيا"}, {"id": 119, "qnum": "106.1", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "الحبس بناء على محاكمة قانونية أمام محكمة مختصة", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 120, "qnum": "106.2", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "القاء القبض على شخص ما لمنعه من الدخول المشروع الى اقليم دولة", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 121, "qnum": "106.3", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "الحتجاز لسباب طبية منعا لنتشار مرض معد", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 122, "qnum": "106.4", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "الحتجاز في حالة الشتباه المعقول بارتكاب شخص لجريمة معينة )حجز احتياطي(", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 123, "qnum": "106.5", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "احتجاز شخص لتبنيه معتقدا يخالف العقيدة السلمية والتي هي مصدرا رئيسا للدولة", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 124, "qnum": "106.6", "kind": "tf", "group": "ضع صح على حالت الحرمان المشروعة وخطأ على الحرمان غير المشروع او التعسفي", "prompt": "مخالفة الوامر الصادرة عن المحاكم طبقا للقانون", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 125, "qnum": 107, "kind": "mc", "prompt": "من الضمانات الدنيا الخاصة بمعاملة المحتجزين والمحرومين من حريتهم المنصوص عليها في العهد: كل ما يلي صحيح ما عدا:", "options": ["ابلغ المحتجز باسباب احتجازه", "احالة المحتجز بتهم جزائية الى احد القضاة او الموظفين المخولين قانونا بمباشرة وظائف القضاة", "يجب الفراج عن المحتجز بكفالة مالية او كفالة مكان القامة فور التحقيق معه", "حق كل محتجز في الطعن بقرار احتجازه في المحكمة المختصة", "حق ضحايا الحتجاز الغير قانوني في المطالبة والحصول على تعويض منصف", "حق المحتجزين من المتهمين بارتكاب جرائم في الدفاع وفي محاكمة عادلة منصفة"], "correctIndex": 2, "explanation": null}, {"id": 126, "qnum": 108, "kind": "tf", "prompt": "تم اصدار قانون العقوبات البديلة في مملكة البحرين في عام 2010", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "في عام 2018"}, {"id": 127, "qnum": 109, "kind": "tf", "prompt": "يعكس قانون العقوبات البديلة توجه القيادة البحرينية الى العقاب الذي يخفف عبء الصلح والتأهيل", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يعكس توجه القيادة البحرينية الى الصلح والتأهيل بدل من العقاب"}, {"id": 128, "qnum": 110, "kind": "tf", "prompt": "يعتبر العقوبات البديلة من ضمن العقوبات السالبة للحرية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بل استغنت عن العقوبات السالبة للحرية"}, {"id": 129, "qnum": 111, "kind": "tf", "prompt": "العقوبات البديلة تتم من قبل النيابة العامة فقط وهذا يعني تخفيف العبء على القضاة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "العقوبات البديلة جعلت امام القاضي والنيابة العامة فرض تدابير بديلة عن الحبس"}, {"id": 130, "qnum": 112, "kind": "mc", "prompt": "كل ما يلي هو من قبيل المساواة امام المحاكم والهيئات القضائية ما عدا", "options": ["ضمان وصول الشخاص الى المحاكم بكافة انواعها بصرف النظر عن جنسيتهم او عرقهم او لونهم", "معاملة جميع اطراف القضية من دون تمييز", "ل يحق للمتهم العتراض على الشهود او سؤالهم لنهم ليسوا طرفا في القضية", "تكافؤ الفرص القانونية اي حصول جميع اطراف الدعوى على الحقوق الجرائية دون تفرقة"], "correctIndex": 2, "explanation": null}, {"id": 131, "qnum": 113, "kind": "tf", "prompt": "استقللية السلطة القضائية تعني أن القضاء ل يأخذ أوامره إل من السلطة التشريعية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "هي سلطة مستقلة يعني فصلها عن السلطتين القضائية والتشريعية"}, {"id": 132, "qnum": 114, "kind": "tf", "prompt": "من شروط المحاكمة ان تكون عادلة وسرية امام هيئة قضائية مختصة ومستقلة وعادلة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "محاكمة عادلة وعامة"}, {"id": 133, "qnum": 115, "kind": "tf", "prompt": "ل يجيز العهد الول محاكمة المدنيين امام محاكم عسكرية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يجيز محاكمة المدنيين امام محاكم عسكرية أو خاصة بشكل استثنائي في بعض الحالت"}, {"id": 134, "qnum": 116, "kind": "tf", "prompt": "ليجوز ان تكون المحاكمة سرية في بعض الحالت وعلى سبيل المثال المتعلقة بالداب العامة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 135, "qnum": 117, "kind": "tf", "prompt": "اكد الدستور البحريني على مجموعة من الضمانات اللزمة للمحاكمة العادلة والعلنية أمام القضاة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 136, "qnum": 118, "kind": "tf", "prompt": "في حال كان القاضي قريبا لحد الطراف يجب عليه التنحي عن نظر القضية وذلك لتكون الهيئة القضائية محايدة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 137, "qnum": 119, "kind": "mc", "prompt": "كل ما يلي هي ضمانات نص عليها الدستور البحريني ما عدا", "options": ["التأكيد على شرف القضاء ونزاهة القضاة وعدلهم اساس الحكم وضمان للحقوق الحريات", "التأكيد بأن ليس لجهة سلطان على القاضي في قضائه ول يجوز مطلقا التدخل في سير العدالة", "نص الدستور بأن القانون هو الذي يحدد اختصاص المحاكم ودرجاتهم", "وضح الدستور ان جلسات المحاكم سرية ول تتم علنيتها مطلقا", "انشاء المجلس العلى للقضاء لحسن سير العمل في المحاكم", "انشاء المحكمة الدستورية لمراقبة دستورية القانون واللوائح"], "correctIndex": 3, "explanation": null}, {"id": 138, "qnum": 120, "kind": "tf", "prompt": "وظيفة المحكمة الدستورية هو الشراف على القضاة والتأكد من ادائهم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لمراقبة دستورية القانون واللوائح"}, {"id": 139, "qnum": 121, "kind": "tf", "prompt": "المتهم بريء حتى تثبت ادانته في محاكمة قانونية تؤمن له فيها الضمانات الضرورية لممارسة حق الدفاع", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 140, "qnum": 122, "kind": "tf", "prompt": "يمكن الدلء بتصريحات عامة تؤكد ادانة المتهم بشرط ان تكون المعلومات دقيقة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "واجب على السلطات المتناع عن اصدار احكام مسبقة عن محاكمة ما أو الدلء بتصريحات عامة تؤكد ادانة المتهم"}, {"id": 141, "qnum": 123, "kind": "mc", "prompt": "اي من الحالت التالية صحيحة", "options": ["اذا صدر قانون ينص على عقوبة اخف او اعلى يستمر المحكوم عليه على نفس الحكم السابق", "اذا صدر قانون ينص على عقوبة اخف ينفذ في حق المحكوم عليه القانون الجديد ويستفاد من التخفيف", "اذا صدر قانون ينص على عقوبة اشد من العقوبة الولى ينفذ على المحكوم القانون الجديد"], "correctIndex": 1, "explanation": null}, {"id": 142, "qnum": 124, "kind": "tf", "prompt": "يتم محاكمة من ارتكب جريمة عند صدور قانون يجرم هذه الجريمة وان كان صدور هذا القانون بعد ارتكابه للجريمة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يجب ان ل يدان اي شخص بأي جريمة بسبب فعل ما او امتناعه عن فعل لم يكن وقت ارتكابه يشكل جريمة بمقتضى القانون الوطني او الدولي"}, {"id": 143, "qnum": 125, "kind": "mc", "prompt": "كل ما يلي يعتبر من حقوق الشخاص المتهمين بجرائم جنائية ما عدا", "options": ["ابلغهم سريعا بتفاصيل القضية وبلغة يفهمونها", "اعطاؤهم الوقت الكافي لعداد دفاعهم والتصال بمحام", "يحاكموا دون تأخير ل مبرر له", "يحاكموا حضوريا ولهم ان يدافعوا عن انفسهم او بواسطة محام", "يحق للمتهم اختيار القاضي الذي يرى انه منصف وعادل", "مناقشة شهود التهام ولهم الحصول على موافقة لستدعاء شهود النفي", "تزويدهم بمترجم اذا كانوا ل يتقنون اللغة المستخدمة في المحكمة", "ل يكرهون على الشهادة ضد انفسهم او العتراف بذنبهم"], "correctIndex": 4, "explanation": null}, {"id": 144, "qnum": 126, "kind": "tf", "prompt": "سن الحداث هو من سن السابعة الى سن 15 سنة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "سن الحدث كل من لم يتجاوز سنه 18 سنة"}, {"id": 145, "qnum": 127, "kind": "mc", "prompt": "كل ما يلي يعتبر من ضمن ضمانات الحكم الجنائي ما عدا", "options": ["اعادة النظر بواسطة هيئة قضائية اعلى )الستئناف(", "التعويض في حالت وقوع خطأ قضائي", "ل يحق الستئناف على الجاني بعد صدور الحكم حتى وان عثر على ادلة جديدة تدين الشخص", "عدم جواز المحاكمة عن الجريمة ذاتها مرتين سواء امام ذات المحكمة او محكمة اخرى"], "correctIndex": 2, "explanation": null}, {"id": 146, "qnum": 128, "kind": "tf", "prompt": "ينص العهد الدولي على وجوب دفع تعويض وفقا للقانون للشخاص الذين صدر بحقهم حكم نهائي يدينهم بجريمة جنائية أو أنزل بهم العقاب ثم ابطل الحكم او صدر عفو عنهم بسبب وقوع خطأ قضائي", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 147, "qnum": 129, "kind": "tf", "prompt": "تضمن القوانين البحرينية حق كل شخص ادين بجريمة حق اللجوء الى هيئة قضائية أعلى لكي تعيد النظر في قرار ادانته وفي العقاب الذي حكم عليه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 148, "qnum": 130, "kind": "tf", "prompt": "ل يحق للشخص المدان بجريمة معينة ان يلجأ الى هيئة قضائية اعلى اذا تمت الموافقة من قبل وزير الداخلية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 149, "qnum": 131, "kind": "tf", "prompt": "يحق للدولة الزام مواطنيها باعتناق الدين الذي تدين به وال يمارس المواطنون اي ديانة غير ديانة الدولة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 150, "qnum": 132, "kind": "mc", "prompt": "كل ما يلي هو مما نص عليه العهد الدولي في الحرية الدينية ما عدا:", "options": ["لكل انسان حق في حرية الفكر والوجدان وان يدين بدين ما او يعتنقه بالضافة الى حريته في التعبد واقامة الشعائر الدينية", "ل يجوز تعرض احد لكراه من شأنه أن يخل بحريته في اعتناق أي دين أو معتقد", "يجوز اخضاع حياة النسان للقيود متى ما أرادت الدولة بالشكل المطلق", "تتعهد الدول الطراف في العهد باحترام حرية الباء وحقهم في تأمين تربية أولدهم دينيا وخلقيا وفقا لقناعتهم الشخصية"], "correctIndex": 2, "explanation": null}, {"id": 151, "qnum": 133, "kind": "mc", "prompt": "تتكون الحرية الدينية من", "options": ["حرية العقيدة وحرية ممارسة الشعائر الدينية", "حرية العقيدة وحرية الرأي", "حرية ممارسة الشعائر الدينية وحرية الضمير"], "correctIndex": 0, "explanation": null}, {"id": 152, "qnum": 134, "kind": "mc", "prompt": "حرية العقيدة تعني:", "options": ["ان يمارس النسان الشعائر الدينية التي يعتقد بها", "ان يكون للنسان الحق في اختيار ما يؤدي اليه تفكيره ويستقر عليه ضميره من عقيدة دون اكراه", "ان النسان له الحق في نشر ما يعتقد به ويمارس طقوسها"], "correctIndex": 1, "explanation": null}, {"id": 153, "qnum": 135, "kind": "tf", "prompt": "ل يوجد فرق بين حرية العقيدة وحرية ممارسة الدين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 154, "qnum": 136, "kind": "tf", "prompt": "حرية العقيدة مطلقة أي ل يوجد قيود عليها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 155, "qnum": 137, "kind": "mc", "prompt": "حرية ممارسة الشعائر الدينية تشمل ما يلي ما عدا:", "options": ["اداء الطقوس الدينية والصلوات وفروض العبادة بشكل فردي او جماعي", "اقامة دور العبادة الخاصة بها وحرية ارتيادها جهرا وعلنية", "عرض الرموز والحتفال بالعطلت وايام الراحة", "العتقاد بما يؤدي اليه تفكيره ويستقر عليه ضميره من عقيدة", "استخدام اللغة الخاصة بالعقيدة"], "correctIndex": 3, "explanation": null}, {"id": 156, "qnum": 138, "kind": "tf", "prompt": "ل يوجد قيود على حرية ممارسة الشعائر الدينية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 157, "qnum": 139, "kind": "mc", "prompt": "يشترط في حرية ممارسة الشعائر ما يلي", "options": ["عدم الخلل بالنظام العام والداب العامة والعتداء على مشاعر معتنقي الديانات السماوية الخرى المعترف بها", "ان تكون ممارسة الشعائر في الماكن المغلقة فقط", "ان يتم رفع رموز معتنقي الحريات حتى ل يتم الترويج لها"], "correctIndex": 0, "explanation": null}, {"id": 158, "qnum": 140, "kind": "tf", "prompt": "في ميثاق العمل الوطني البحريني اكد بشكل صريح على أن العتقاد بغير السلم مرفوض باعتبار ان البحرين دولة اسلمية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "تكفل الدولة حرية العقيدة وتكون حرية الضمير مطلقة وتصون الدولة حرية العبادة وتضمن حرية اقامة الشعائر الدينية وفق العادات السائدة في البلد"}, {"id": 159, "qnum": 141, "kind": "tf", "prompt": "اقر دستور مملكة البحرين حرية العقيدة إل انه مايز بين المسلمين وغير المسلمين باعتبار ان مملكة البحرين تدين بدين السلم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 160, "qnum": 142, "kind": "tf", "prompt": "حرصا من مملكة البحرين على الحرية الدينية لم يجرم القانون البحريني الفعال التي فيها مساس بأسس الشريعة السلمية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 161, "qnum": 143, "kind": "tf", "prompt": "حرية الرأي والتعبير من الحقوق المطلقة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 162, "qnum": 144, "kind": "tf", "prompt": "حرية الرأي مطلقة وحرية التعبير مقيدة بشروط", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 163, "qnum": 145, "kind": "tf", "prompt": "اكد الدستور البحريني المعدل 2002 على أن حرية الرأي والبحث العلمي مكفولة ولكل انسان حق التعبير عن رأيه ونشره بالقول والكتابة أو غيرهما وذلك وفقا للشروط والوضاع التي بينها القانون مع عدم المساس بأسس العقيدة السلمية ووحدة الشعب وبما ل يثير الفرقة والطائفية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 164, "qnum": 146, "kind": "tf", "prompt": "حرية التعبير تعني تلقي الفكار ونقلها للخرين دون اعتبار للحدود", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 165, "qnum": 147, "kind": "tf", "prompt": "كفل الدستور البحريني الحق في التعبير للمواطنين فقط ووفقا للشروط والوضاع التي بينها القانون", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "للمواطنين وغير المواطنين"}, {"id": 166, "qnum": 148, "kind": "tf", "prompt": "ل وجود لعلقة بين حرية التعبير وحرية الصحافة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 167, "qnum": 149, "kind": "mc", "prompt": "كل ما يلي يعتبر شروطا لفرض قيود على حرية الرأي والتعبير ما عدا:", "options": ["ان تكون القيود بغرض احترام حقوق الخرين أو سمعتهم", "حماية المن القومي او النظام العام", "لمنع الفتنة العامة", "نشر آراء مخالفة لراء النظام"], "correctIndex": 3, "explanation": null}, {"id": 168, "qnum": 150, "kind": "tf", "prompt": "الدستور البحريني قيد حرية التعبير بعدم المساس بأسس العقيدة السلمية ووحدة الشعب وبما ل يثير الفتنة الطائفية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 169, "qnum": 151, "kind": "tf", "prompt": "للدولة الحق المطلق لوضع قيود على حرية تنقل المواطن حرصا منها على سلمتهم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 170, "qnum": 152, "kind": "tf", "prompt": "للدولة الحق في وضع قيود على اقامة الجانب وتمنعهم من الوصول الى مناطق عسكرية مثل", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 171, "qnum": 153, "kind": "tf", "prompt": "السفر للخارج مكفول ما لم يكن السفر بغرض الهجرة بصورة دائمة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "حتى وان كان بغرض الهجرة بصورة دائمة"}, {"id": 172, "qnum": 154, "kind": "tf", "prompt": "ل يحق بأي حال حرمان الشخص من الدخول الى بلده بشكل تعسفي", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 173, "qnum": 155, "kind": "tf", "prompt": "حرية التنقل من الحريات المطلقة التي ل يجوز تقييدها", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 174, "qnum": 156, "kind": "tf", "prompt": "يجوز للدولة تقييد حرية التنقل متى ما أرادت دون شروط", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 175, "qnum": 157, "kind": "mc", "prompt": "كل ما يلي تعتبر من ضمن الشروط على تقييد حرية التنقل ما عدا:", "options": ["لحماية المن القومي أو النظام العام أو الصحة العامة والداب العامة أو حماية حقوق الخرين وحرياتهم", "يجب ان تكون القيود ضرورية", "يجب أن تكون القيود منصوص عليها قانونا", "يجب ان تكون هذه القيود بناء على شكوك ظنية", "يجب ان تكون القيود متسقة مع جميع الحقوق الخرى المعترف بها في العهد", "يجب ان تتماشى القيود مع مبدأ التناسب"], "correctIndex": 3, "explanation": null}, {"id": 176, "qnum": 158, "kind": "tf", "prompt": "كفل الدستور البحريني عدم تقييد حرية اي شخص في القامة أو التنقل إل وفق احكام القانون وبمراقبة القضاء", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 177, "qnum": 159, "kind": "tf", "prompt": "ينص العهد الدولي الول على ان لكل مواطن الحق في ان يشارك في ادارة الشؤون العامة إما مباشرة وإما بواسطة ممثلين يختارون في حرية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 178, "qnum": 160, "kind": "tf", "prompt": "يحق للمواطن ان ينتخب وينتخب في انتخابات نزيهة تجري دوريا بالقتراع الخاص وعلى قدم المساواة بين الناخبين والتصويت العلني تضمن التعبير الحر عن ارادة الناخبين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "القتراع العام والتصويت السري"}, {"id": 179, "qnum": 161, "kind": "tf", "prompt": "يجب ان تتاح للمواطن على قدم المساواة عموما مع سواه فرصة تقلد الوظائف العامة في البلد", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 180, "qnum": 162, "kind": "mc", "prompt": "أي من العبارات التالية خاطئة", "options": ["تعتبر الحقوق السياسية حصرا على المواطنين الذين يحملون جنسية الدولة", "يمكن للدولة التمييز بين المواطنين في الحقوق السياسية على اسس )العرق، الجنس، النسب(", "يجوز فرض شروط موضوعية لتمتع المواطنين بالحقوق السياسية كتحديد سن معين كحد ادنى )الهلية القانونية("], "correctIndex": 1, "explanation": null}, {"id": 181, "qnum": 163, "kind": "mc", "prompt": "يتصل مفهوم ادارة الشؤون العامة بممارسة السلطة", "options": ["السياسية", "القتصادية", "الجتماعية"], "correctIndex": 0, "explanation": null}, {"id": 182, "qnum": 164, "kind": "mc", "prompt": "السلطة السياسية هي", "options": ["التشريعية والتنفيذية", "التنفيذية والقضائية", "الدارية والتشريعية والتنفيذية", "الدارية والقضائية والتشريعية"], "correctIndex": 2, "explanation": null}, {"id": 183, "qnum": 165, "kind": "mc", "prompt": "تتحقق مشاركة المواطنين مباشرة في ادارة الشؤون العامة من خلل", "options": ["ممارسة السلطة بأنفسهم كأعضاء الهيئات التشريعية", "من خلل المناقشات العامة والحوار مع ممثليهم", "من خلل التظاهرات العامة"], "correctIndex": 0, "explanation": null}, {"id": 184, "qnum": 166, "kind": "mc", "prompt": "كل ما يلي من قبيل مشاركة المواطنين مباشرة في ادارة الشؤون العامة ماعدا", "options": ["يمارسون السلطة بأنفسهم كأعضاء الهيئات التشريعية", "يشغلون المناصب التنفيذية", "يختارون دستورهم أو يعدلونه أو يبتون في مسائل عامة عن طريق الستفتاءات الشعبية أو غيرها من الجراءات النتخابية", "المناقشات العامة والحوار مع ممثليهم"], "correctIndex": 3, "explanation": null}, {"id": 185, "qnum": 167, "kind": "mc", "prompt": "النتخاب هو:", "options": ["الوسيلة الديمقراطية لسناد السلطة السياسية الى ممثلين عن الشعب عن طريق التصويت", "طرح موضوع عام على هيئة الناخبين لخذ رأيهم فيه وبالتالي فإن الرد فيه يكون دائما بنعم أو ل وموافق أو غير موافق", "حق مواطني الدولة أن يكونوا ضمن الشخاص الذين يمكن اختيارهم كممثلين في المجالس النيابية والبلدية"], "correctIndex": 0, "explanation": null}, {"id": 186, "qnum": 168, "kind": "mc", "prompt": "الستفتاء هو:", "options": ["الوسيلة الديمقراطية لسناد السلطة السياسية الى ممثلين عن الشعب عن طريق التصويت", "طرح موضوع عام على هيئة الناخبين لخذ رأيهم فيه وبالتالي فإن الرد فيه يكون دائما بنعم أو ل وموافق أو غير موافق", "حق مواطني الدولة أن يكونوا ضمن الشخاص الذين يمكن اختيارهم كممثلين في المجالس النيابية والبلدية"], "correctIndex": 1, "explanation": null}, {"id": 187, "qnum": 169, "kind": "mc", "prompt": "الترشح هو:", "options": ["الوسيلة الديمقراطية لسناد السلطة السياسية الى ممثلين عن الشعب عن طريق التصويت", "طرح موضوع عام على هيئة الناخبين لخذ رأيهم فيه وبالتالي فإن الرد فيه يكون دائما بنعم أو ل وموافق أو غير موافق", "حق مواطني الدولة أن يكونوا ضمن الشخاص الذين يمكن اختيارهم كممثلين في المجالس النيابية والبلدية"], "correctIndex": 2, "explanation": null}, {"id": 188, "qnum": 170, "kind": "mc", "prompt": "كل ما يلي هو من ضمن ضمانات ممارسة حق النتخاب والترشح ما عدا", "options": ["ان تجري النتخابات بصورة دورية", "يجب ان يقر القانون وينظم حق القتراع والستفتاءات الشعبية", "يجب على الدولة تسهيل عملية النتخاب من حيث تيسير عملية تسجيل الناخبين إذا كان ضروريا وتسهيل اثبات القامة والتسجيل اذا كان ضروريا", "حملت تثقيف وتسجيل ناخبين", "حماية الحريات المرتبطة بالنتخاب والتي تساهم بتحققه على اكمل وجه كحرية التعبير وحرية التجمع وحرية تكوين الجمعيات", "ارشاد المواطنين الى انتخاب اشخاص تحددهم الدولة حتى يتم اختيار اشخاص ذوي كفاءة ومؤهلين"], "correctIndex": 5, "explanation": null}, {"id": 189, "qnum": 171, "kind": "mc", "prompt": "كل ما يلي هو من ضمن ضمانات ممارسة حق النتخاب والترشح ما عدا", "options": ["يجب على الدولة اتخاذ كافة الجراءات لتجاوز الصعوبات التي ترتبط بحق النتخاب كالمية والعوائق اللغوية", "وجود جهة وطنية محايدة تراقب عمل السلطة التنفيذية", "يجب على الدولة ان تكفل حق النتخاب بما يتيح اختيار المرشحين بحرية", "ينبغي تشكيل سلطة انتخابية مستقلة للشراف على عملية النتخابات وكفالة سلمة صناديق القتراع وفرز الصوات في حضور المرشحين ووكلئهم", "وجود جهات مستقلة عن السلطة التنفيذية للتدقيق على عملية القتراع وفرز الصوات ووجود مجال للمراجعة القضائية"], "correctIndex": 1, "explanation": null}, {"id": 190, "qnum": 172, "kind": "tf", "prompt": "لقد فرض العهد الدولي نظاما انتخابيا موحدا لكافة الدول المنضوية في العهد", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 191, "qnum": 173, "kind": "tf", "prompt": "كفل دستور البحرين حق النتخاب والترشح سواء كانوا رجال او نساء على ان ينظم القانون الشروط اللزمة لممارسة هذه الحقوق والحرمان منها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 192, "qnum": 174, "kind": "mc_ungraded", "prompt": "حدد قانون مباشرة الحقوق السياسية 2002 الحقوق التي يتمتع بها المواطنون وهي", "options": ["ابداء الرأي في كل استفتاء يجري وفقا للدستور، انتخاب اعضاء مجلس النواب", "ابداء الرأي، وانتخاب الحكومة", "ابداء الرأي في كل استفتاء يجري وفقا للميثاق، انتخاب اعضاء المجلس البلدي"], "correctIndex": null, "explanation": null}, {"id": 193, "qnum": 175, "kind": "mc", "prompt": "كل ما يلي تعتبر من الشروط الواجب ان يتمتع بها المواطنون لمباشرة الحقوق السياسية في مملكة البحرين ما عدا:", "options": ["ان يكون قد بلغ من العمر 20 سنة كاملة يوم الستفتاء او النتخاب", "أن يكون كامل الهلية", "ان يكون قد مارس حق النتخاب او الستفتاء مسبقا", "ان يكون مقيما اقامة عادية في الدائرة النتخابية طبقا لما هو ثابت في البطاقة السكانية"], "correctIndex": 2, "explanation": null}, {"id": 194, "qnum": 176, "kind": "tf", "prompt": "يعتبر المحكوم عليه بعقوبة جنائية أو في جريمة مخلة بالشرف أو المانة محروما من مباشرة النتخاب وفق القانون البحريني وان تم رد العتبار اليه لنها جريمة ل تغتفر", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 195, "qnum": 177, "kind": "tf", "prompt": "يعتبر المحكوم عليه بالحبس في احدى الجرائم النتخابية المنصوص عليها في هذا القانون، وذلك مالم يكن الحكم موقوفا تنفيذه أو كان المحكوم عليه قد رد اليه اعتباره محروما من مباشرة النتخاب وفق القانون البحريني", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 196, "qnum": 178, "kind": "mc", "prompt": "كل ما يلي يعتبر تسهيل للعملية النتخابية وضمانا لحق المواطن في النتخاب ما عدا", "options": ["توفير جداول النتخابات )يتم تسجيل اسماء الناخبين فيها(", "على المواطن تسجيل اسمه قبل النتخابات", "تعرض اسماء الناخبين قبل 45 يوما من ميعاد النتخابات لمدة 7 ايام في كل دائرة انتخابية"], "correctIndex": 1, "explanation": null}, {"id": 197, "qnum": 179, "kind": "tf", "prompt": "لضمان سلمة العملية النتخابية يوجد لجنة عليا مهمتها سلمة الستفتاء وانتخاب المجلس البلدي في انحاء المملكة والبت في جميع المور التي تعرضها عليها لجان المناطق النتخابية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "المجلس النيابي"}, {"id": 198, "qnum": 180, "kind": "tf", "prompt": "تشكل لجنة الشراف على سلمة الستفتاء والنتخاب من وزير الداخلية او وزير الخارجية بالنيابة في حال غياب وزير الداخلية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "وزير العدل"}, {"id": 199, "qnum": 181, "kind": "mc", "prompt": "كل ما يلي من شروط عضوية مجلس النواب في مملكة البحرين ما عدا )قد يكون اكثر من خيار(:", "options": ["ان يكون بحريني الجنسية بصفة أصلية فقط )او متجنسا مضى على اكتسابه الجنسية 10 سنوات على القل(", "ان يكون غير حامل لجنسية دولة اخرى باستثناء جنسية إحدى دول مجلس التعاون الخليجي بشرط أن تكون جنسيته البحرينية هي الجنسية الصلية", "أن يجيد قراءة اللغة العربية وكتابتها", "ان يكون متمتعا بكافة الحقوق المدنية والسياسية وان يكون اسمه مدرجا في احد جداول النتخاب", "ان ل تقل سنه يوم النتخاب عن 20 سنة ميلدية كاملة )الصحيح 30 سنة(", "ان ل تكون عضويته بمجلس الشورى أو مجلس النواب قد اسقطت بقرار من المجلس الذي ينتمي اليه بسبب فقد الثقة والعتبار أو بسبب الخلل بواجبات العضوية"], "correctIndex": 4, "explanation": null}, {"id": 200, "qnum": 182, "kind": "mc", "prompt": "كل ما يلي هم محرومون من الترشح لمجلس النواب وفق القانون البحريني ما عدا:", "options": ["المحكوم عليه بعقوبة جنائية وإن صدر بشأنه عفو خاص عن العقوبة أو رد اعتباره", "المحكوم عليه بعقوبة الحبس في الجرائم العمدية لمدة تزيد على ست أشهر مالم يصدر بشأنه عفو خاص عن العقوبة", "قيادات واعضاء الجمعيات السياسية الفعليين المنحلة بحكم نهائي لرتكابها مخالفة جسيمة لحكام دستور المملكة أو اي قانون من قوانينها", "كل من تعمد الضرار أو تعطيل سير الحياة الدستورية أو النيابية، وذلك بانهاء أو ترك العمل النيابي بالمجلس، أو تم اسقاط عضويته لذات السباب"], "correctIndex": 1, "explanation": null}, {"id": 201, "qnum": 183, "kind": "tf", "prompt": "لضمان دورية النتخابات والعمل النيابي يكون النتهاء الطبيعي لمجلس النواب والذي يفضي انتهاؤه بعد 3 سنوات ميلدية من تاريخ أول اجتماع له", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "4 سنوات"}, {"id": 202, "qnum": 184, "kind": "tf", "prompt": "يكون النتهاء الغير طبيعي لمجلس النواب في حالة حل المجلس ويجب ان تجرى انتخابات جديدة خلل أربعة اشهر من الحل", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 203, "qnum": 185, "kind": "tf", "prompt": "ل يحق للملك تأجيل انتخاب المجلس الجديد وإن رأى مجلس الوزراء أمر النتخابات متعذرا لي سبب ويعتبر تحايل على الديمقراطية وحق المواطنين في المشاركة في الشؤون العامة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 204, "qnum": 186, "kind": "mc", "prompt": "لضمان حق المواطنين في تقلد الوظائف العامة", "options": ["ان تكون الوظائف ثابتة وان تكون المعايير والجراءات المتبعة في التعيين والترقية والوقف المؤقت عن العمل موضوعية ومعقولة", "أن تكون الوظيفة وفق المؤهل العلمي للمواطن", "أن يكون المواطن غير منتمي للجمعيات السياسية المعارضة لنظام الحكم", "أن يمارس كل ما يطلب منه سياسيا من جهة الدولة"], "correctIndex": 0, "explanation": null}, {"id": 205, "qnum": 187, "kind": "tf", "prompt": "يعتبر الدستور البحريني ان الوظائف العامة هي حق للدولة توظف من تراه مناسبا للوظيفة ووفق اجنداتها الخاصة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يعتبر التعيين في الوظيفة العامة حقا دستوريا لكل مواطن يحكمه مبدأ المساواة امام تولي الوظائف العامة وفقا للشروط التي يبينها القانون"}, {"id": 206, "qnum": 188, "kind": "mc", "prompt": "كل ما يلي هي شروط وضعها قانون الخدمة المدنية لموظفي الحكومة والقطاع العام ما عدا", "options": ["ان يكون متمتعا بالجنسية البحرينية", "ان يكون محمود السيرة والسلوك", "ل يكون قد سبق الحكم عليه بعقوبة جنائية أو بعقوبة مقيدة للحرية في جريمة مخلة بالشرف أو المانة مالم يرد له اعتباره", "ل يكون قد سبق فصله من الخدمة بحكم قضائي او بقرار تأديبي نهائي مالم تمض على صدور اي منها 5 سنوات على القل )3 سنوات(", "ل يقل سنه عن 30 سنة وقت التوظيف )17 سنة(", "ان تثبت لياقته الصحية للوظيفة المطلوب شغلها", "أن يكون مستوفيا لشروط الوظيفة المطلوب شغلها والتي يحددها الديوان"], "correctIndex": 4, "explanation": null}, {"id": 207, "qnum": 189, "kind": "tf", "prompt": "الحزب السياسي هو تنظيم لمجموعة من الشخاص تربطهم مبادئ موحدة ويعملون من خلل هذه المبادئ في الوصول إلى المشاركة في شؤون الحكم", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 208, "qnum": 190, "kind": "tf", "prompt": "يطلق على الحزاب السياسية في البحرين جمعيات سياسية وقد انشأت في عام 2000 وفقا للقانون", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "في عام 2005"}, {"id": 209, "qnum": 191, "kind": "tf", "prompt": "الجمعيات السياسية في البحرين هي كل جماعة منظمة، تؤسس طبقا لحكام القانون وتقوم على مبادئ وأهداف مشتركة، وتعمل بصورة علنية بوسائل سياسية ديمقراطية مشروعة، بقصد المشاركة في الحياة السياسية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 210, "qnum": 192, "kind": "tf", "prompt": "ل تعتبر جمعية سياسية كل جمعية أو جماعة تقوم على محض أغراض دينية أو علمية أو ثقافية أو رياضية أو مهنية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 211, "qnum": 193, "kind": "tf", "prompt": "نص دستور البحرين على أن حرية تكوين الجمعيات والنقابات على أسس وطنية ولهداف مشروعة وبوسائل سلمية مكفولة وفقا للشروط والوضاع التي بينها القانون", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 212, "qnum": 194, "kind": "tf", "prompt": "يعتبر دستور البحرين ان عدم المساس باسس الدين والنظام العام شرط من شروط كفالة حرية كافة انواع الجمعيات ما عدا الجمعيات السياسية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بما فيها الجمعيات السياسية"}, {"id": 213, "qnum": 195, "kind": "tf", "prompt": "لم يحظر قانون الجمعيات السياسية في البحرين اي جهة من المشاركة في تكوين الجمعيات السياسية او النضمام لها فلكل مواطن الحق في ذلك على قدر المساواة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "حظر منتسبي قوة الدفاع، الحرس الوطني، اجهزة المن التابعة للدولة، رجال القضاة، أعضاء السلك الدبلوماسي أو القنصلي"}, {"id": 214, "qnum": 196, "kind": "mc", "prompt": "كل مما يلي هم من المحظورين من النتماء الى الجمعيات السياسية ما عدا", "options": ["الموظف العام", "منتسبي قوة الدفاع", "الحرس الوطني", "اجهزة المن التابعة للدولة", "رجال القضاة", "اعضاء السلك الدبلوماسي والقنصلي"], "correctIndex": 0, "explanation": null}, {"id": 215, "qnum": 197, "kind": "mc", "prompt": "الحقان اللذان يعتبران عنصرين جوهريين من عناصر الديمقراطية بما يكفل للفراد التعبير عن آرائهم السياسية وغير السياسية", "options": ["حرية التجمع السلمي وحرية تكوين الجمعيات", "حرية العقيدة والحرية الدينية", "حرية المان والحقوق القضائية"], "correctIndex": 0, "explanation": null}, {"id": 216, "qnum": 198, "kind": "tf", "prompt": "ينص العهدان أن لكل فرد حق تكوين الجمعيات مع آخرين بما في ذلك انشاء النقابات والنضمام اليها من اجل حماية مصالحه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 217, "qnum": 199, "kind": "tf", "prompt": "حرية التجمع السلمي وحرية تكوين الجمعيات هي من الحقوق المطلقة ول يجوز تقييدها وقد اكد على ذلك العهد", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 218, "qnum": 200, "kind": "tf", "prompt": "يعرف حق التجمع السلمي على أنه الحق في الجتماع العام أو الخاص المنظم والمؤقت أو غير المؤقت بقصد تبادل الفكار أو التظاهر بصورة جماعية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "المؤقت"}, {"id": 219, "qnum": 201, "kind": "tf", "prompt": "أهداف التجمعات السلمية يجب ان تكون اهداف سياسية واقتصادية فقط", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "سياسية واقتصادية واجتماعية ودينية واغراض عامة وخاصة"}, {"id": 220, "qnum": "202.1", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "كل اجتماع يعقد في مكان عام او خاص يدخله اشخاص لم توجه لهم دعوة شخصية", "options": ["عام", "غير عام"], "correctIndex": 0, "explanation": null}, {"id": 221, "qnum": "202.2", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "الجتماعات الدينية التي تتم في دور العبادة", "options": ["عام", "غير عام"], "correctIndex": 1, "explanation": null}, {"id": 222, "qnum": "202.3", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "الجتماعات التي تنظمها أو تدعو اليها الجهات الحكومية المختصة", "options": ["عام", "غير عام"], "correctIndex": 1, "explanation": null}, {"id": 223, "qnum": "202.4", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "الجتماعات التي تعقدها لعضائها الهيئات الخاصة المعترف بها كالنقابات", "options": ["عام", "غير عام"], "correctIndex": 1, "explanation": null}, {"id": 224, "qnum": "202.5", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "التجمعات والمسيرات والمظاهرات التي تقام أو تسير في الطرق أو الميادين والتي يكون الغرض منها سياسيا", "options": ["عام", "غير عام"], "correctIndex": 0, "explanation": null}, {"id": 225, "qnum": "202.6", "kind": "tf", "group": "ميز في ما يلي بين الجتماعات العامة والغير عامة في العبارات التالية", "prompt": "الجتماعات واللقاءات والمجالس التي جرى عليها العرف، أو تستلزمها المناسبات الجتماعية والعياد", "options": ["عام", "غير عام"], "correctIndex": 1, "explanation": null}, {"id": 226, "qnum": 203, "kind": "mc", "prompt": "كل ما يلي هي شروط تنظيم الجتماعات العامة ما عدا:", "options": ["تقديم اخطار كتابي الى رئيس المن قبل الجتماع بثلثة ايام على القل", "يجب ان يكون لكل اجتماع لجنة مؤلفة من رئيس وعضوين على القل", "عدم الخلل بالمن العام والنظام العام أو الضرار بالغير أو بالموال العامة أو الخاصة", "يجب تدوين اسماء كل من يشارك في الجتماع"], "correctIndex": 3, "explanation": null}, {"id": 227, "qnum": 204, "kind": "mc", "prompt": "يجب ان يوقع على اخطار تنظيم الجتماعات العامة 3 اشخاص يشترط فيهم", "options": ["ان يكون من اهل المدينة او الجهة التي سيعقد فيه الجتماع", "ان يكون محل إقامته تلك المدينة أو القرية وأن يكون معروفا بين أهلها بحسن السمعة", "أن يكون متمتعا بحقوقه المدنية والسياسية", "أن يكون موظفا ويثبت الجهة التي يعمل فيها", "يبين اسمه في الخطار وصفته ومهنته ومحل اقامته وإل اعتبر الخطار كأن لم يكن"], "correctIndex": 3, "explanation": null}, {"id": 228, "qnum": 205, "kind": "tf", "prompt": "تعرف الجمعية على انها شخص معنوي يستهدف تحقيق هدف مشروع ربحي او غير ربحي", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "هدف مشروع غير ربحي"}, {"id": 229, "qnum": 206, "kind": "tf", "prompt": "يقصد بالجمعية في القانون البحريني كل جماعة ذات تنظيم مستمر وتتألف من عدة اشخاص طبيعيين او اعتباريين لغرض آخر غير الحصول على ربح مادي وتستهدف القيام بنشاط اجتماعي أو تعليمي خاص او ثقافي أو خيري", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 230, "qnum": 207, "kind": "mc", "prompt": "النظام الذي يقوم على إبلغ السلطات العامة بتأسيس جمعية متوافقة مع القانون", "options": ["نظام الشعار", "نظام التسجيل", "نظام اشعار وتسجيل"], "correctIndex": 0, "explanation": null}, {"id": 231, "qnum": 208, "kind": "mc", "prompt": "النظام الذي يقوم على أخذ موافقة السلطات مسبقا على التأسيس", "options": ["نظام الشعار", "نظام التسجيل", "نظام اشعار وتسجيل"], "correctIndex": 1, "explanation": null}, {"id": 232, "qnum": 209, "kind": "mc", "prompt": "يجب أن تحدد المنظمة لحق تكوين الجمعيات فترة زمنية قصيرة للرد وفي حال عدم الرد خلل الفترة تعتبر الجمعية مشروعة وهذا منطبق فقط على نظام:", "options": ["نظام الشعار", "نظام التسجيل", "نظام الشعار ونظام التسجيل"], "correctIndex": 2, "explanation": null}, {"id": 233, "qnum": 210, "kind": "mc", "prompt": "تعتمد مملكة البحرين نظام ............... حيث تثبت الشخصية العتبارية للجمعية ويمكنها مباشرة عملها من تاريخ نشر تسجيلها في الجريدة الرسمية", "options": ["نظام الشعار", "نظام التسجيل", "نظام اشعار وتسجيل"], "correctIndex": 1, "explanation": null}, {"id": 234, "qnum": 211, "kind": "tf", "prompt": "ل يجوز للجهة الدارية المختصة رفض تسجيل الجمعية لي سبب من السباب", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 235, "qnum": 212, "kind": "mc", "prompt": "كل السباب التالية هي اسباب تسمح للجهة الدارية المختصة رفض تسجيل الجمعية ما عدا", "options": ["اذا كان المجتمع في غير حاجة لخدمتها", "وجود جمعية أو جمعيات أخرى تسد حاجة المجتمع في ميدان النشاط المطلوب", "اذا كان إنشاؤها ل يتفق مع أمن الدولة أو مصلحتها أو لعدم صلحية مقر الجمعية أو مكان ممارسة نشاطها من الناحية الصحية أو الجتماعية", "أن تكون الجمعية قد انشئت بقصد احياء جمعية أخرى سبق حلها", "ان تكون للجمعية اهداف خاصة"], "correctIndex": 4, "explanation": null}, {"id": 236, "qnum": 213, "kind": "tf", "prompt": "يمكن حل الجمعية اختياريا حسب نظامها أو بقرار اغلبية ثلثي اعضاء الجمعية العمومية ما لم يشترط نظام الجمعية اغلبية أكثر من ذلك", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 237, "qnum": 214, "kind": "tf", "prompt": "يمكن حل الجمعية اجباريا او اغلقها اداريا لمدة تزيد عن 45 يوما بقرار من الوزير المختص", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ل تزيد عن 45 يوما"}, {"id": 238, "qnum": 215, "kind": "tf", "prompt": "ل يحق للجمعية الطعن في قرار الحل أو الغلق المؤقت", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يحق للجمعية ولكل ذي شأن الطعن في القرار امام المحكمة الكبرى المدنية خلل خمسة عشر يوما من تاريخ نشر القرار في الجريدة الرسمية"}, {"id": 239, "qnum": 216, "kind": "mc", "prompt": "اجاز القانون الدولي فرض القيود على التجمع السلمي وتكوين الجمعيات بالشروط التالية", "options": ["أن تفرض طبقا للقانون، أن تشكل تدابير ضرورية في مجتمع ديمقراطي لصيانة المن القومي أو السلمة العامة أو النظام العام أو حماية الصحة العامة أو الداب العامة أو حماية حقوق الخرين وحرياتهم", "أن ل يكون هناك شروط او قيود على التجمع السلمي وتكوين الجمعيات", "ان تكون القيود مطلقة على التجمع السلمي وتكوين الجمعيات"], "correctIndex": 0, "explanation": null}, {"id": 240, "qnum": "217.1", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "اجاز القانون لرئيس المن العام منع أي اجتماع من شأنه الخلل بالنظام العام وحسن الدب", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 241, "qnum": "217.2", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع القانون عقد الجتماعات في دور العبادة أو في المدارس أو في غيرها من مباني الحكومة حتى لو كانت هذه الجتماعات خاصة بمواضعها ول تتعارض مع الغاية أو الغرض التي خصصت من اجله", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 242, "qnum": "217.3", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "حظر الجتماعات والعتصامات في مدينة المنامة ما عدا العتصامات أمام المنظمات الدولية بعد الحصول على إذن كتابي خاص", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 243, "qnum": "217.4", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "ل يجوز عقد الجتماعات العامة قبل الساعة السابعة صباحا او أن تستمر الى ما بعد الساعة الحادية عشرة والنصف بعد منتصف الليل", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 244, "qnum": "217.5", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "ل يجوز ان يشترك في اجتماع عام من يحمل سلحا إل اذا كان مرخصا له بحمله", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 245, "qnum": "217.6", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع المظاهرات التي تتم لغراض انتخابية حيث ان الدعاية النتخابية تتم وفق قانون خاص بهذا الشأن", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 246, "qnum": "217.7", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "ل يجوز استعمال المركبات في اي مسيرة أو مظاهرة أو مكان تجمع إل بإذن كتابي خاص من وزير العمل", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 247, "qnum": "217.8", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع حمل اعلم أو رايات أو صور لقيادات الجمعيات السياسية داخل البحرين", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 248, "qnum": "217.9", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع ترديد أية هتافات او شعارات تسيء لرموز الوطن او لسمعة الدولة", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 249, "qnum": "217.10", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع كل ما من شأنه تعطيل الحياة الطبيعية أو إعاقة التنقل أو التأثير بأية صورة على الخدمات أو المرافق العامة", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 250, "qnum": "217.11", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع القيام بأعمال أو تصرفات تمثل خروجا على القيم والعراف والتقاليد الجتماعية", "options": ["خطأ", "صح"], "correctIndex": 1, "explanation": null}, {"id": 251, "qnum": "217.12", "kind": "tf", "group": "ضع صح او خطأ على العبارات كل ما يلي يعتبر من قيود حرية الجتماع في البحرين:", "prompt": "منع اي خطاب أو نقاش او محاضرة بالجتماع العام أو التجمع أو المسيرة", "options": ["خطأ", "صح"], "correctIndex": 0, "explanation": null}, {"id": 252, "qnum": 218, "kind": "mc", "prompt": "كل ما يعتبر من القيود على حرية تكوين الجمعيات في مملكة البحرين ما عدا", "options": ["عدم مخالفة الجمعية عند التأسيس أو العمل للنظام العام وللداب العامة أو لسبب أو غرض غير مشروع", "ل يجوز لي جمعية أن تحصل على أموال من شخص اجنبي أو جهة اجنبية ول أن ترسل أموال لمنظمات أو اشخاص في الخارج إل بإذن من الجهة المختصة", "ل يجوز للجمعية الشتغال بالسياسة حيث يوجد قانون للجمعيات السياسية ينظم هذا الموضوع ول يجوز للجمعية الدخول في مضاربات مالية لن أهدافها ليست مالية بالساس", "ل يجوز لي جمعية طباعة ونشر الكتب والمجلت الخاصة بالجمعية إل بإذن مسبق", "يحظر الجمع بين عضوية أكثر من جمعية تعمل في انشطة نوعية مختلفة إل بموافقة الوزير المختص", "ل يجوز لي جمعية ان تنتسب او تشترك او تنضم الى جمعية أو هيئة او اتحاد خارج البحرين دون إذن مسبق من الجهة الدارية المختصة بذلك"], "correctIndex": 3, "explanation": null}, {"id": 253, "qnum": 219, "kind": "tf", "prompt": "اختلف دستور البحرين مع العهد الدولي بخصوص حق حرمة الحياة الخاصة وكفل الدستور هذا الحق بالمطلق واعتبره حقا مطلقا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 254, "qnum": 220, "kind": "tf", "prompt": "أكد العهد الدولي الول على حماية خصوصية النسان وشؤون اسرته وبيته ومراسلته وشرفه وسمعته", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 255, "qnum": 221, "kind": "tf", "prompt": "ل ينبغي تفتيش المنزل من السلطات مهما كانت السباب", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 256, "qnum": 222, "kind": "tf", "prompt": "يحق للدولة اعتراض طريق التصالت الهاتفية والبرقيات وغيرها من اشكال التصالت والتنصت على المحادثات وتسجيلها", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 257, "qnum": 223, "kind": "tf", "prompt": "يجب أن ينظم القانون عملية جمع وحفظ المعلومات الشخصية بأي وسيلة سواء كانت الحاسوب او غيرها ومهما كانت الجهة القائمة على ذلك سواء السلطات العامة أم الفراد العاديين أو الهيئات الخاصة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 258, "qnum": 224, "kind": "tf", "prompt": "يتعين على الدولة كفالة عدم وقوع المعلومات المتعلقة بالحياة الخاصة للشخص في ايدي الشخاص غير المصرح لهم قانونا الحصول عليها أو تجهيزها او استخدامها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 259, "qnum": 225, "kind": "tf", "prompt": "لكل فرد حق التحقق من أي بيانات الغير والتي مخزنة لدى السلطات العامة أو الهيئات الخاصة التي تديرها ومن حق كل مواطن طلب التعديل عليها أو حذفها إذا كانت غير صحيحة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "المعلومات الشخصية فقط وليست للغير"}, {"id": 260, "qnum": 226, "kind": "tf", "prompt": "اكدت المادة 25 من الدستور للمساكن حرمة فل يجوز دخولها أو تفتيشها مطلقا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "إل بإذن وباستثناء في حالت الضرورة القصوى التي يعينها القانون وبالكيفية المنصوص عليها فيه"}, {"id": 261, "qnum": 227, "kind": "tf", "prompt": "اكدت المواثيق الدولية على أن السرة هي الوحدة الجماعية الطبيعية والساسية في المجتمع وكلما تمتعت بحقوقها انعكس ذلك على المجتمع المحلي والدولي", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 262, "qnum": 228, "kind": "tf", "prompt": "ل يختلف مفهوم السرة من دولة الى اخرى", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 263, "qnum": 229, "kind": "mc", "prompt": "كل ما يلي هي حقوق اسرية مكفولة في الدستور البحريني ما عدا", "options": ["السرة اساس المجتمع قوامها الدين والخلق وحب الوطن", "تكفل الدولة التوفيق بين واجبات المرأة نحو السرة وعملها في المجتمع ومساواتها بالرجال في ميادين الحياة السياسية والجتماعية والثقافية والقتصادية دون الخلل بأحكام الشريعة السلمية", "حق تكون السرة من الجنسين المختلفين او من نفس الجنس فيحق للرجل ان يتزوج من نفس جنسه وكذلك للمرأة ولهم كافة الحقوق الكاملة", "تكفل الدولة تحقيق الضمان الجتماعي اللزم للمواطنين في حالة الشيخوخة أو المرض او العجز عن العمل أو اليتم أو الترمل أو البطالة", "تأمين الرعاية الصحية اللزمة والتأمين الجتماعي وتعمل على وقايتهم من براثن الجهل والخوف والفاقة"], "correctIndex": 2, "explanation": null}, {"id": 264, "qnum": 230, "kind": "tf", "prompt": "جاء في المواثيق الدولية أن من حق المهات الحصول على اجازة وضع لمدة معقولة مدفوعة الجر", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 265, "qnum": 231, "kind": "mc", "prompt": "هي حقوق لزمة للشخص كونه عضوا في المجتمع وتتطلب من الدولة تدخل يضمن التمتع بها على أكمل وجه وان هذه الحقوق مرتبطة بعملية التنمية", "options": ["الحقوق المدنية والسياسية", "الحقوق القتصادية والجتماعية والثقافية"], "correctIndex": 1, "explanation": null}, {"id": 266, "qnum": 232, "kind": "tf", "prompt": "ل تتحقق الحقوق السياسية والمدنية إل بتحقق الحقوق القتصادية والجتماعية والثقافية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 267, "qnum": 233, "kind": "tf", "prompt": "يجب تنفيذ الحقوق القتصادية والجتماعية والسياسية بشكل فردي على غرار الحقوق السياسية والمدنية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 268, "qnum": 234, "kind": "tf", "prompt": "لم ترد الحقوق القتصادية والجتماعية والثقافية في العلن العالمي لدى جاءت مفصلة في العهد الثاني", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "جاءت في العلن العالمي لحقوق النسان بشكل عام"}, {"id": 269, "qnum": 235, "kind": "mc", "prompt": "كل ما يلي هو من ضمن الحقوق القتصادية والجتماعية والثقافية ما عدا:", "options": ["الحق في العمل", "الحق في الصحة", "الحق في الحياة", "الحق في التعليم", "الحقوق الثقافية", "الحق في الضمان الجتماعي", "الحق في مستوى معيشي كاف"], "correctIndex": 2, "explanation": null}, {"id": 270, "qnum": 236, "kind": "tf", "prompt": "الحق في العمل حق مطلق غير مقيد وعلى الدولة توفير الوظائف المناسبة لكل فرد في المجتمع على قدر المساواة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "الحق في العمل مقيد بشروط في الحصول عليه"}, {"id": 271, "qnum": 237, "kind": "tf", "prompt": "يقع على الدولة فقط ضمان البعد الفردي والمتمثل في حق الفرد في الحصول على عمل والذي ل بد ان يخضع لعتبارات الختيار والقبول الحر", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "البعد الفردي والبعد الجتماعي المتمثل في الحق النقابي"}, {"id": 272, "qnum": 238, "kind": "tf", "prompt": "اكد الدستور على أن العمل حق لكل مواطن وواجب عليه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 273, "qnum": 239, "kind": "tf", "prompt": "تناول العهد الول الحق في العمل بصورة أشمل من أي صك دولي آخر", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "العهد الدولي الثاني"}, {"id": 274, "qnum": 240, "kind": "mc", "prompt": "دور الدولة في ضمان حق الفراد في الحصول على العمل:", "options": ["ضمان حق الفراد في الحصول على العمل، اتاحة اختيار او قبول العمل، المساواة، العمل اللئق، الحق النقابي", "ضمان حق الفراد في الحصول على العمل وارغامهم على اختياره لنه واجب عليهم، العمل اللئق", "ضمان حق الفراد في الحصول على العمل، اتاحة اختيار أو قبول العمل، المساواة، العمل اللئق"], "correctIndex": 0, "explanation": null}, {"id": 275, "qnum": 241, "kind": "tf", "prompt": "الدولة ملزمة لتوفير العمل بشكل فوري للمواطنين وهي مسؤولية الدولة التي يجب ان تتحملها", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بشكل تدريجي وفقا للموارد المتوفرة للدول"}, {"id": 276, "qnum": 242, "kind": "tf", "prompt": "التزام الدول بإيجاد فرص عمل يعني من الناحية العملية ان على الدولة ايجاد فرص عمل تتفق تماما مع رغبات ومؤهلت الشخاص الراغبين في العمل", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ل يعني من الناحية العملية ايجاد فرص عمل تتفق تماما مع رغبات ومؤهلت الشخاص الراغبين في العمل"}, {"id": 277, "qnum": 243, "kind": "tf", "prompt": "ليس المقصود من الحق في الحصول على عمل أن يكون معينا بالذات وانما المساعدة على ايجاد عمل مناسب بعيدا عن السخرة او العبودية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 278, "qnum": 244, "kind": "mc", "prompt": "الجهة المعنية بالبحث عن العمل في مملكة البحرين", "options": ["وزارة العمل", "جامعة البحرين", "الشؤون الجتماعية"], "correctIndex": 0, "explanation": null}, {"id": 279, "qnum": 245, "kind": "tf", "prompt": "اكتفت مملكة البحرين بوضع الستراتيجيات والبحث عن العمل للمواطنين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "صدور قانون التأمين ضد التعطل"}, {"id": 280, "qnum": 246, "kind": "tf", "prompt": "يقصد بالعمل الجباري كل عمل او خدمة تطلب عنوة من اي شخص تحت التهديد ولم يتطوع الشخص لدائها بمحض اختياره", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 281, "qnum": 247, "kind": "tf", "prompt": "أكد الدستور البحريني على عدم فرض العمل الجباري مطلقا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "اكد على جواز فرض العمل الجباري بشروط معينة"}, {"id": 282, "qnum": 248, "kind": "mc", "prompt": "أكد الدستور البحريني على فرض العمل الجباري بالشروط التالية ما عدا:", "options": ["وجود نص قانوني يجيز العمل الجباري صادر من السلطة التشريعية", "وجود حاجة في وزارة العمل تقتضي وجود عمل اجباري", "ان يكون النص ضرورة قومية وهذا الشرط ضروري لتجنب الطعن بعدم دستورية القانون", "ان يكون العمل بمقابل عادل او تنفيذا لحكم قضائي"], "correctIndex": 1, "explanation": null}, {"id": 283, "qnum": 249, "kind": "tf", "prompt": "ينص الدستور البحريني على ان العمل واجب على كل مواطن", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 284, "qnum": 250, "kind": "tf", "prompt": "المواثيق الدولية لم تلزم الدول بصياغة وتطبيق سياسة وطنية لتشجيع تكافؤ الفرص والمساواة في المعاملة والمهن", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 285, "qnum": 251, "kind": "tf", "prompt": "أكد الدستور البحريني على مبدأ المساواة بين المواطنين في الحقوق والواجبات على قدم المساواة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 286, "qnum": 252, "kind": "tf", "prompt": "اعتمدت مملكة البحرين تكافؤ الفرص المفضي وذلك لدماج احتياجات القيمين في التنمية لتحقيق مستوى رصد اوجه احتياجاتهم في التنمية ليكون المحرك نحو تحقيق العدالة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لدماج المرأة"}, {"id": 287, "qnum": 253, "kind": "mc", "prompt": "كل ما يلي هو من أبرز الحقوق المؤدية للعمل اللئق ما عدا:", "options": ["الحق في الجر العادل", "ظروف عمل تكفل السلمة والصحة داخل المنشأة العمالية", "اختيار الموظف لمكان العمل وايام الجازات المناسبة له", "حماية العمال من الفصل التعسفي", "التحديد المعقول لساعات العمل وأوقات الراحة والعطل والجازات الدورية المدفوعة", "توفر سبل النصاف والمساءلة"], "correctIndex": 2, "explanation": null}, {"id": 288, "qnum": 254, "kind": "tf", "prompt": "من أهم الوسائل الكفيلة بتحقيق الجر العادل وجود حد أدنى للجور تحدده الدولة ول يجوز النزول عنه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 289, "qnum": 255, "kind": "mc", "prompt": "نفذت مملكة البحرين مشروع تحسين اجور العمالة الوطنية حيث قامت وزارة العمل والتنمية الجتماعية بالتعاون مع \"تمكين\" برفع سقف الجور على النحو التالي", "options": ["الجامعيين من 400 الى 450 كحد ادنى، ومن 270 الى 300 لغير الجامعيين", "الجامعيين من 400 الى 600 كحد ادنى، ومن 270 الى 400 لغير الجامعيين", "الجامعيين من 450 الى 500 كحد ادنى، ومن 270 الى 350 لغير الجامعيين"], "correctIndex": 0, "explanation": null}, {"id": 290, "qnum": 256, "kind": "tf", "prompt": "اكد قانون العمل على أنه ل يجوز الحجز على أجر العامل عن أي جزء منه أو أن يستقطع منه وفاء لدين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يجوز ولكن بحدود 25% ويجوز رفع النسبة الى 50% في حال دين النفقة، وبشرط أن يكون بموجب موافقة كتابية من العامل"}, {"id": 291, "qnum": 257, "kind": "tf", "prompt": "أكد قانون العمل البحريني التزام صاحب العمل بتوفير وسائل السلمة والصحة المهنية على نحو يكفل الوقاية من مخاطر العمل", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 292, "qnum": 258, "kind": "tf", "prompt": "الوقاية من المخاطر وظيفة العامل وعليه أن يحافظ على نفسه من خلل لبس ما يقي به نفسه وبالتالي عند المخالفة يتم توقيف العامل عن العمل لعدم التزامه", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "على صاحب العمل أو من يمثله أن يوفر للعامل وسائل الوقاية الشخصية من مخاطر العمل وتدريبه على استخدامها"}, {"id": 293, "qnum": 259, "kind": "tf", "prompt": "وفق القانون البحريني يحق لصاحب العمل ان يحمل العامل تكلفة وسائل الحماية اللزمة سواء بشكل مباشر او من خلل الستقطاع من الراتب", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 294, "qnum": 260, "kind": "mc", "prompt": "يلزم قانون العمل البحريني مع مراعاة احكام قانون التأمين الجتماعي، صاحب العمل بما يلي ما عدا:", "options": ["اجراء الفحص الطبي البتدائي على العامل قبل التحاقه بالعمل", "اجراء الفحص الطبي الدوري للعمال المعرضين للصابة بالمراض المهنية", "ان يوفر لعماله وسائل السعافات الطبية وعلج الحالت الطارئة طبقا للنظام الذي يصدر بتحديده قرار من وزير الصحة بالتفاق مع الوزير", "توفير الوجبات الصحية اللزمة للعمال وتوفير اماكن صحية مخصصة لتناول الوجبات", "اعداد ملف طبي لكل عامل يوضح على الخص ما قد يطرأ من تطور على حالته الصحية واجراءات علجه وأنواع المراض العادية والمهنية واصابات العمل والعجز ان وجدت"], "correctIndex": 3, "explanation": null}, {"id": 295, "qnum": 261, "kind": "tf", "prompt": "نص قانون العمل على أن ينشأ مجلس للسلمة والصحة المهنية يتولى رسم ومتابعة تنفيذ السياسة العامة في مجال السلمة والصحة المهنية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 296, "qnum": 262, "kind": "tf", "prompt": "تتولى وزارة الصحة في سبيل التحقق من تطبيق اجراءات وشروط السلمة الوطنية وفق القانون انشاء جهاز يسمى جهاز تفتيش السلمة والصحة المهنية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "وزارة العمل وليس وزارة الصحة"}, {"id": 297, "qnum": "263.1", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب الجنس أو اللون أو الدين او العقيدة", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 0, "explanation": null}, {"id": 298, "qnum": "263.2", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب خيانة المانة", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 1, "explanation": null}, {"id": 299, "qnum": "263.3", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب الحمل واجازة الحمل", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 0, "explanation": null}, {"id": 300, "qnum": "263.4", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب استخدام العامل لحقه في الجازات طبقا لحكام هذا القانون", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 0, "explanation": null}, {"id": 301, "qnum": "263.5", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب تقديم شكوى كيدية ضد صاحب العمل", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 1, "explanation": null}, {"id": 302, "qnum": "263.6", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب انتماء العامل الى نقابة عمالية", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 0, "explanation": null}, {"id": 303, "qnum": "263.7", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب سعي العامل الى تمثيل العمال", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 0, "explanation": null}, {"id": 304, "qnum": "263.8", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب العتداء بالسب والشتم والضرب على الموظفين او المسؤولين", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 1, "explanation": null}, {"id": 305, "qnum": "263.9", "kind": "tf", "group": "اكتب عبارة تعسفي او غير تعسفي للحالت التالية:", "prompt": "الفصل بسبب مخالفة القوانين وتعطيل سير العمل داخل المنشأة", "options": ["تعسفي", "غير تعسفي"], "correctIndex": 1, "explanation": null}, {"id": 306, "qnum": 264, "kind": "tf", "prompt": "توافقت الدول على ان يكون ساعات العمل 48 ساعة اسبوعيا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ل يوجد توافق دولي على ساعات العمل المثلى إل انها تتراوح بين 40 الى 48 ساعة اسبوعيا"}, {"id": 307, "qnum": 265, "kind": "tf", "prompt": "حددت بعض التفاقيات العمالية الجازات المدفوعة بثلثة اسابيع عن كل سنة عمل", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 308, "qnum": 266, "kind": "tf", "prompt": "وفق قانون العمل البحريني ل يجوز تشغيل العامل اكثر من ساعات في اليوم الواحد مالم يتم التفاق على خلف ذلك", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 309, "qnum": 267, "kind": "tf", "prompt": "في شهر رمضان المبارك ل يجوز تشغيل العامل المسلم اكثر من 5 ساعات يوميا", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "6 ساعات"}, {"id": 310, "qnum": 268, "kind": "tf", "prompt": "وفقا لقانون العمل البحريني ل يجوز تشغيل العامل اكثر من 48 ساعة في السبوع", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 311, "qnum": 269, "kind": "mc", "prompt": "وفق قانون العمل البحريني يجوز لصاحب العمل تشغيل العامل ساعات عمل اضافية اذا اقتضت ظروف العمل ذلك، ويمنح العامل عن كل ساعة اضافية اجرا يوازي الجر الذي يتقاضاه مضافا اليه:", "options": ["25% نهارا و 50% ليل", "30% نهارا و 60% ليل", "50% ليل او نهارا"], "correctIndex": 0, "explanation": null}, {"id": 312, "qnum": 270, "kind": "tf", "prompt": "وفق قانون العمل البحريني للعامل الحق في اجازة اسبوعية لمدة 24 ساعة ويمكن تشغيله في يوم اجازته واعطائه اجازة في يوم اخر او تعويضه بـ 150% عن اجرة هذا اليوم ول يجوز تشغيله في اجازته أكثر من فترتين متتاليتين إل بموافقته كتابيا", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 313, "qnum": 271, "kind": "tf", "prompt": "وفقا لقانون العمل البحريني يستحق العامل اجازة سنوية لمدة 30 يوم مدفوعة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 314, "qnum": 272, "kind": "tf", "prompt": "وفقا لقانون العمل البحريني أن العامل يستحق اجازة عن العياد والمناسبات الرسمية ويحق تشغيله في هذا اليوم ويدفع للعامل 150% اجرة عن هذا اليوم او تعويضه بيوم اخر حسب اختيار صاحب العمل", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "حسب اختيار العامل"}, {"id": 315, "qnum": 273, "kind": "tf", "prompt": "وفق القانون البحريني يجب مراعاة عدم تشغيل العامل اكثر من 6 ساعات متواصلة ويمنح فترة او فترات راحة ل تقل في مجموعها عن نصف ساعة وتكون محسوبة من ضمن ساعات العمل", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "غير محسوبة من ضمن ساعات العمل"}, {"id": 316, "qnum": 274, "kind": "tf", "prompt": "يجب ان يتاح لكل فرد امكانية اللجوء على الصعيد الوطني الى سبل انتصاف فعالة قضائية او غير قضائية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 317, "qnum": 275, "kind": "mc", "prompt": "في مملكة البحرين تم انشاء جهاز يسمى جهاز فض منازعات العمل الفردية يتولى التسوية الودية لما يعرض عليه من نزاع فردي بين العامل وصاحب العمل، والجهة المسؤولة هي:", "options": ["وزارة العمل", "وزارة العدل", "القضاء البحريني", "هيئة تنظيم سوق العمل"], "correctIndex": 0, "explanation": null}, {"id": 318, "qnum": 276, "kind": "mc", "prompt": "تم انشاء مكتب لتحضير الدعوى العمالية وتهيئتها للمرافعة يسمى مكتب ادارة الدعوى العمالية وذلك في:", "options": ["وزارة العمل", "وزارة العدل", "اللجنة القضائية الخاصة بالمرافعات العمالية", "هيئة تنظيم سوق العمل"], "correctIndex": 1, "explanation": null}, {"id": 319, "qnum": 277, "kind": "tf", "prompt": "تقر المادة 22 من العهد الدولي بحق كل فرد في تكوين الجمعيات أو المنظمات أو الهيئات بالشتراك مع الخرين بحيث تتمتع بوجود قانوني مستقل عن ارادتهم وهو من الحقوق المطلقة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "غير مطلقة"}, {"id": 320, "qnum": 278, "kind": "tf", "prompt": "يقصد بالحق في الصحة الحق في التمتع بمجموعة من المرافق والسلع والظروف الضرورية لبلوغ اعلى مستوى ممكن من الصحة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 321, "qnum": 279, "kind": "tf", "prompt": "يقتصر حق الصحة على تقديم الرعاية الصحية المناسبة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 322, "qnum": 280, "kind": "tf", "prompt": "يتكون الحق في الصحة من الحريات والحقوق", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 323, "qnum": 281, "kind": "tf", "prompt": "يندرج في حق الصحة ان ل يكون النسان عرضة للتعذيب او التجارب الطبية بدون رضاه", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 324, "qnum": 282, "kind": "mc", "prompt": "يتوقف الحق في الصحة على ثلثة عناصر اساسية بحسب ظروف كل دولة وهي", "options": ["التوافر، امكانية الوصول، المقبولية", "سعر الدواء، شخصية المريض وظروفه، جنس المريض", "عمر المريض، نوعية المرض، حاجة المجتمع"], "correctIndex": 0, "explanation": null}, {"id": 325, "qnum": 283, "kind": "tf", "prompt": "هناك ثلث مستويات من الرعاية الصحية )اولية، ثانوية، الرعاية الصحية من المرتبة الثالثة(", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 326, "qnum": 284, "kind": "mc", "prompt": "الرعاية التي تتولى المراض الشائعة والبسيطة ويقدمها موظفون صحيون أو أطباء مدربون تدريبا عاما", "options": ["الرعاية الصحية الثانوية", "الرعاية الصحية الولية", "الرعاية الصحية من المرتبة الثالثة"], "correctIndex": 1, "explanation": null}, {"id": 327, "qnum": 285, "kind": "mc", "prompt": "الرعاية الصحية التي تقوم في المراكز والمستشفيات التي تتولى المراض الشائعة البسيطة أو الخطيرة نسبيا وتستخدم موظفين صحيين واطباء مدربين على تخصصات معينة ومعدات خاصة", "options": ["الرعاية الصحية الثانوية", "الرعاية الصحية الولية", "الرعاية الصحية من المرتبة الثالثة"], "correctIndex": 0, "explanation": null}, {"id": 328, "qnum": 286, "kind": "mc", "prompt": "الرعاية الصحية التي تقدم عند عدد ضئيل نسبيا من المراكز وتتناول عادة عددا قليل من المراض البسيطة او الخطيرة وتتطلب موظفين مدربين على قدر من التخصص المتقدم ومعدات خاصة دقيقة وغالبا ما تكون باهظة التكاليف", "options": ["الرعاية الصحية الثانوية", "الرعاية الصحية الولية", "الرعاية الصحية من المرتبة الثالثة"], "correctIndex": 2, "explanation": null}, {"id": 329, "qnum": 287, "kind": "tf", "prompt": "يجب على الدولة بشكل رئيسي خفض معدل وفيات المواليد ومعدل وفيات الرضع وتأمين نمو الطفل نموا صحيحا", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 330, "qnum": 288, "kind": "mc", "prompt": "على الدولة ان تراعي في امكانية الوصول للسلع والخدمات والظروف الصحية ما يلي", "options": ["عدم التمييز", "امكانية الوصول اقتصاديا", "ان تكون متوفرة مجانا لكل المواطنين والمقيمين على قدر المساواة", "امكانية الوصول ماديا )مكانيا(", "امكانية الوصول الى المعلومات المتصلة بالمسائل الصحية"], "correctIndex": 2, "explanation": null}, {"id": 331, "qnum": 289, "kind": "tf", "prompt": "وفق دستور البحرين ترعى الدولة العلوم والداب والفنون وتشجع البحث العلمي كما تكفل الخدمات التعليمية والثقافية للمواطنين", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 332, "qnum": 290, "kind": "tf", "prompt": "التعليم وفق دستور البحرين الزامي ومجاني في المراحل الولى التي يعينها القانون وعلى النحو الذي يبينه ويضع القانون الخطة اللزمة للقضاء على المية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 333, "qnum": 291, "kind": "tf", "prompt": "وفق الدستور فإن الدولة هي الوحيدة المخولة بإنشاء المدارس والهيئات التعليمية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "يجوز للفراد والهيئات انشاء المدارس والجامعات الخاصة بإشراف من الدولة ووفقا للقانون"}, {"id": 334, "qnum": 292, "kind": "tf", "prompt": "يجب ان يكون اللتحاق بالمؤسسات والبرامج التعليمية في متناول الجميع بدون تمييز", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 335, "qnum": 293, "kind": "tf", "prompt": "يجب ان يكون التعليم مجانا في كل المراحل حتى النتهاء من الجامعة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 336, "qnum": 294, "kind": "tf", "prompt": "يجب ان يكون التعليم مجانيا للمرحلة البتدائية والثانوية بشكل مباشر وفوري", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "البتدائي يكون مجاني والثانوي والعالي بشكل مقبول مع الخذ بمبدأ المجانية بالشكل التدريجي"}, {"id": 337, "qnum": 295, "kind": "tf", "prompt": "في البحرين تعتبر جامعة البحرين هي المسؤولة عن توجيه النظام التعليمي", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "وزارة التربية والتعليم"}, {"id": 338, "qnum": 296, "kind": "tf", "prompt": "التعليم البتدائي يجب ان يتاح بشكل مجاني واختياري", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بشكل الزامي ومجاني"}, {"id": 339, "qnum": 297, "kind": "tf", "prompt": "يقصد بالتعليم البتدائي هو النظام التربوي الرئيسي الذي يوفر التربية الساسية للطفال داخل نطاق السرة ويلبي حاجات التعلم الساسية لكل الطفال ومراعاة ثقافة المجتمع المحلي واحتياجاته", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "خارج نطاق السرة"}, {"id": 340, "qnum": 298, "kind": "tf", "prompt": "في مملكة البحرين يعتبر سن التعليم الساسي هو للطفال الذين يبلغون 8 سنوات وينتهي ببلوغ الطفل 15 سنة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "من 6 سنوات الى 15 سنة"}, {"id": 341, "qnum": 299, "kind": "tf", "prompt": "يعاقب في مملكة البحرين والد الطفل او المتولي أمره اذا تسبب في تخلف الطفل الذي بلغ سن اللزام عن اللتحاق بالتعليم بغرامة ل تقل عن 100 دينار", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "ل تزيد عن 100 دينار"}, {"id": 342, "qnum": 300, "kind": "tf", "prompt": "في مملكة البحرين التعليم الساسي والثانوي مجاني", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 343, "qnum": 301, "kind": "tf", "prompt": "التعليم الثانوي في البحرين هو لمدة 4 سنوات بعد التعليم الساسي", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لمدة 3 سنوات"}, {"id": 344, "qnum": 302, "kind": "tf", "prompt": "التعميم في التعليم الثانوي يعني ان يكون متاحا للجميع في كافة انحاء الدولة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 345, "qnum": 303, "kind": "tf", "prompt": "جعل التعليم الثانوي متاحا يعني أن يكون التعليم الثانوي متوفرا من خلل تهيئة كافة الظروف التي تجعله في متناول الجميع", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 346, "qnum": 304, "kind": "tf", "prompt": "تعني عبارة كافة الوسائل المناسبة اعتماد الدولة مناهج متنوعة لمختلف الطبقات الجتماعية والثقافية", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 347, "qnum": 305, "kind": "tf", "prompt": "تعني عبارة الخذ تدريجيا بمجانية التعليم أنه اذا كانت الولوية لتوفير تعليم ابتدائي مجاني فإن الدول غير ملزمة باتخاذ تدابير من اجل تحقيق تعليم اعدادي وثانوي مجاني", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "الدول ملزمة باتخاذ تدابير من اجل تحقيق تعليم اعدادي وثانوي مجاني"}, {"id": 348, "qnum": 306, "kind": "tf", "prompt": "كفل القانون البحريني التعليم العالي وحدده بالتعليم الذي ل يقل عن سنة دراسية كاملة باحدى مؤسسات التعليم المعترف بها اكاديميا بعد المرحلة الثانوية أو ما يعادلها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 349, "qnum": 307, "kind": "tf", "prompt": "تمنح وزارة التربية والتعليم في البحرين جميع خريجي الثانوية منحا دراسية على حسابها", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "فقط المتفوقين الحاصلين على 90% فما فوق"}, {"id": 350, "qnum": 308, "kind": "tf", "prompt": "يقع على عاتق الدولة تكثيف التربية الساسية للشخاص الذين لم يتلقوا أو لم يستكملوا الدراسة البتدائية", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 351, "qnum": 309, "kind": "tf", "prompt": "كفلت مملكة البحرين محو المية وقيدتها بعمر معين ل يتجاوز 45 عام من عمر المتقدم", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لم يقيدها بعمر او جنس بل هو يمتد لكافة العمار"}, {"id": 352, "qnum": 310, "kind": "tf", "prompt": "وفقا للقانون البحريني فإن الباء ملزمون في ادخال ابنائهم الى المدارس الحكومية في المستوى البتدائي ومخيرون في المراحل المتقدمة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "الدولة احترمت حرية الباء والوصياء في تأمين تربية أولدهم دينيا وخلقيا وفقا لقناعتهم الخاصة، وحرية الباء في اختيار مدارس اخرى غير المدارس العامة"}, {"id": 353, "qnum": 311, "kind": "mc", "prompt": "كل ما يلي من الحقوق الثقافية ما عدا", "options": ["المشاركة في الحياة الثقافية", "المساهمة في التقدم العلمي والستفادة من نتائجه وتطبيقاته", "نشر الثقافات الخاصة مهما كانت حتى وان كانت تروج لفكر مخالف للنظام او الداب العامة", "حماية المصالح المعنوية والمادية المترتبة على النتاج العلمي او الدبي أو الفني"], "correctIndex": 2, "explanation": null}, {"id": 354, "qnum": 312, "kind": "tf", "prompt": "الضمان الجتماعي يهدف الى الحد من الفقر وتخفيف آثاره وتعزيز الدماج الجتماعي ومنع القصاء الجتماعي من خلل طابعه المتمثل في اعادة التوزيع", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 355, "qnum": 313, "kind": "tf", "prompt": "يشمل الحق في الضمان الجتماعي الحق في الحصول على الستحقاقات النقدية والعينية لضمان الحماية من بعض الظروف", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 356, "qnum": 314, "kind": "mc", "prompt": "اي مما يلي يعتبر من الظروف التي تحتاج ضمانا اجتماعيا", "options": ["المومة", "الشيخوخة", "العجز", "اصابات العمل", "وفاة احد افراد السرة", "عدم الحصول على الرعاية الصحية بسبب ارتفاع التكلفة", "عندما ل يكون الدعم السري كافيا", "كل ما ذكر"], "correctIndex": 7, "explanation": null}, {"id": 357, "qnum": 315, "kind": "tf", "prompt": "المعاشات التقاعدية تعتبر نوعا من انواع الضمان الجتماعي", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 358, "qnum": 316, "kind": "tf", "prompt": "التأمين الجتماعي يعتبر من ضمن المخططات غير القائمة على الشتراكات", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 359, "qnum": 317, "kind": "mc", "prompt": "كل ما يلي يعتبر من الحالت الطارئة الجتماعية التي يغطيها نظام المخططات غير القائم على الشتراكات ما عدا:", "options": ["المرض", "العجز عن العمل", "الشيخوخة", "اصابات العمل", "التقاعد"], "correctIndex": 4, "explanation": null}, {"id": 360, "qnum": 318, "kind": "mc", "prompt": "كل ما يلي يعتبر من الحالت الطارئة الجتماعية التي يغطيها نظام المخططات غير القائم على الشتراكات ما عدا:", "options": ["الناجون من الكوارث واليتام", "التعليم العالي", "دعم السر الفقيرة والطفل", "البطالة", "المومة"], "correctIndex": 1, "explanation": null}, {"id": 361, "qnum": 319, "kind": "tf", "prompt": "يقصد بكفاية الحق في الضمان الجتماعي أن تكون الستحقاقات كافية في مقدارها ومدتها في توفير مستوى معيشي كاف وفي الحصول على الرعاية الصحية دون تمييز، كما ينبغي وجود علقة بين الشتراكات المدفوعة ومبلغ الستحقاق ذات الصلة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 362, "qnum": 320, "kind": "tf", "prompt": "ينص الدستور على ان تكفل الدولة تحقيق الضمان الجتماعي اللزم للمواطنين في حالة الشيخوخة أو المرض او العجز عن العمل أو اليتم أو الترمل أو البطالة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 363, "qnum": 321, "kind": "tf", "prompt": "تتبنى مملكة البحرين الضمان الجتماعي القائم على الشتراكات فقط", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 364, "qnum": 322, "kind": "mc", "prompt": "توفر المملكة نظاما للتأمين الجتماعي بنظام الشتراكات من المستفيدين واصحاب العمل والدولة ويتولى ذلك:", "options": ["وزارة العمل", "الهيئة العامة للتأمين الجتماعي", "هيئة صندوق العمل", "وزارة التنمية الجتماعية"], "correctIndex": 1, "explanation": null}, {"id": 365, "qnum": 323, "kind": "tf", "prompt": "نظام الضمان الجتماعي القائم على الشتراكات نظام اختياري", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "الزامي"}, {"id": 366, "qnum": 324, "kind": "mc", "prompt": "يسري اشتراكات النظام الجتماعي القائم على الشتراكات على:", "options": ["جميع العاملين الذين يعملون بموجب عقد عمل لمصلحة صاحب عمل او اكثر", "موظفو الحكومة ومستخدموها المعينون على درجات في الميزانية العامة للدولة أو ميزانية البلديات وسائر الهيئات المحلية الخاضعون لقانون معاشات ومكافآت التقاعد", "افراد وضباط قوة الدفاع والمن العام", "كل ما ذكر"], "correctIndex": 3, "explanation": null}, {"id": 367, "qnum": 325, "kind": "tf", "prompt": "ل يغطي الضمان الجتماعي المشتغلين لحسابهم الخاص وأصحاب المهن الحرة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 368, "qnum": 326, "kind": "tf", "prompt": "الضمان الجتماعي يغطي المنح العائلية، التأمين ضد المرض والعجز المؤقت بسبب المرض أو المومة", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 369, "qnum": 327, "kind": "mc", "prompt": "الضمان الجتماعي غير القائم على الشتراكات يتبع:", "options": ["وزارة التنمية الجتماعية", "وزارة العمل", "الهيئة العامة للتأمينات الجتماعية", "كل ما ذكر غير صحيح"], "correctIndex": 0, "explanation": null}, {"id": 370, "qnum": 328, "kind": "mc", "prompt": "ايرادات الضمانات الجتماعية غير القائمة على الشتراكات من:", "options": ["العتمادات المدرجة في الميزانية العامة للدولة", "التبرعات والهبات والوصايا التي يتلقاها الصندوق من الهيئات والفراد", "وفورات العتمادات المذكورة للسنة المالية السابقة", "عائد استثمار اموال الصندوق", "كل ما ذكر صحيح"], "correctIndex": 4, "explanation": null}, {"id": 371, "qnum": 329, "kind": "tf", "prompt": "يغطي الضمان في مملكة البحرين )السرة/الولد/الرملة/المطلقة/المهجورة/أسرة المسجون/البنت غير المتزوجة/اليتيم/العاجز عن العمل/المعاق/المسن(", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 372, "qnum": 330, "kind": "tf", "prompt": "يقصد في تغطية التأمين الجتماعي بالمهجورة كل امرأة لم تجاوز الستين وثبت شرعا هجر زوجها لها وليس لها عائل مقتدر ملزم بالنفاق عليها وليس لها مال كاف لمعيشتها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 373, "qnum": 331, "kind": "tf", "prompt": "يقصد بالعاجز عن العمل في تغطية التأمين الجتماعي كل فرد عاطل عن العمل وعجز عن حصوله على وظيفة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "كل فرد ثبت اصابته بمرض يمنعه كليا او جزئيا من كسب عيشه او عيش اسرته التي يعولها ولم يجاوز سن الستين وليس له عائل مقتدر ملزم بالنفاق عليه ول مال كاف يعتمد عليه في معيشته"}, {"id": 374, "qnum": 332, "kind": "mc", "prompt": "يشترط لستحقاق المساعدة الجتماعية كل ما يلي ما عدا:", "options": ["ان يكون له قريب مقتدر ملزم بالنفاق عليه )الصحيح أن ل يكون له قريب مقتدر ملزم بالنفاق عليه(", "أن يثبت بالبحث الجتماعي ان مجموع الدخل الشهري لطالب المساعدة الجتماعية يقل عن الحد الدنى اللزم لتوفير متطلبات الحياة الساسية", "ان تثبت الحالة الموجبة لصرف المساعدة الجتماعية بموجب مستندات رسمية معتمدة من الجهات الحكومية المختصة"], "correctIndex": 0, "explanation": null}, {"id": 375, "qnum": 333, "kind": "tf", "prompt": "وفق القانون البحريني يجوز الجمع بين المساعدات الجتماعية والمعاشات المستحقة خاصة اذا كانت المعاشات او التأمينات اعلى من المساعدات المستحقة", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": null}, {"id": 376, "qnum": 334, "kind": "tf", "prompt": "وفق القانون ل يجوز ان تقل المساعدات عن 70 دينار شهريا", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 377, "qnum": 335, "kind": "tf", "prompt": "يستثنى من المساعدات الجتماعية طبقا لقانون الضمان الجتماعي المقيم في دور الرعاية الجتماعية او الصحية كالمسن والمعاق إل اذا ثبت انه يحتاج لتلك المساعدة في توفير بعض مستلزماته التي ل يمكن ان تقوم تلك الدور بتوفيرها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 378, "qnum": 336, "kind": "tf", "prompt": "تقر الدول الطراف في العهد الدولي الثاني بحق كل شخص في مستوى معيشي كاف له ولسرته يوفر ما يفي بحاجتهم من الغذاء والكساء والمأوى", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 379, "qnum": 337, "kind": "tf", "prompt": "يرتبط حق السكن الملئم بالكرامة النسانية المتأصلة في شخص النسان", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 380, "qnum": 338, "kind": "tf", "prompt": "السكن الملئم يعني ان يكون السكن متمتعا على درجة من الخصوصية، والمساحة الكافية، والمان الكافي، والنارة والتهوية الكافيتين، والهيكل الساسي الملئم والموقع الملئم بالنسبة الى امكنة العمل والمرافق الساسية مهما كانت التكاليف", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "بتكاليف معقولة"}, {"id": 381, "qnum": 339, "kind": "tf", "prompt": "كفل الدستور البحريني السكن الملئم لجميع المواطنين بدون استثناء", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "لذوي الدخل المحدود"}, {"id": 382, "qnum": 340, "kind": "tf", "prompt": "تقدم مملكة البحرين الخدمات السكانية اما في صورة قروض نقدية ميسرة او صورة وحدات اسكانية كما تدفع مملكة البحرين علوة اسكان 100 دينار لمن تجاوز طلبه خمس سنوات", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 383, "qnum": 341, "kind": "mc", "prompt": "يجب مراعاة المور التالية في السكن الملئم", "options": ["الضمان القانوني لشغل المكان", "توفير الخدمات والمواد والمرافق والهياكل الساسية", "الصلحية للسكن", "القدرة على تحمل الكلفة", "الموقع المناسب", "اتاحة امكانية الحصول على سكن", "السكن الملئم من الناحية الثقافية", "كل ما ذكر صحيح"], "correctIndex": 7, "explanation": null}, {"id": 384, "qnum": 342, "kind": "tf", "prompt": "يقصد بحالت اخلء المساكن بالكراه نقل الفراد والسر أو المجتمعات المحلية بشكل دائم او مؤقت ورغم إرادتهم، من المنازل أو الراضي التي يشغلونها دون اتاحة سبل مناسبة من الحماية القانونية أو غيرها من انواع الحماية او اتاحة امكانية الحصول عليها", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 385, "qnum": 343, "kind": "mc", "prompt": "من سبل الحماية الجرائية اللزم اتباعها عند اجراء عمليات الخلء بالكراه", "options": ["اتاحة فرصة للتشاور الحقيقي مع المتضررين", "اشعار المتضررين كافة بشكل واف ومناسب قبل الموعد المقرر للخلء", "الحاطة علما بعمليات الخلء المقترحة", "حضور موظفين حكوميين او ممثلين عنهم اثناء الخلء", "توفير سبل النتصاف القانونية", "كل ما ذكر صحيح"], "correctIndex": 5, "explanation": null}, {"id": 386, "qnum": 344, "kind": "tf", "prompt": "ل يختلف الحق في الغذاء الكافي عن حق التحرر من الجوع فكلها يعطي نفس المعنى", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "هذا تعريف الحق في الغذاء الكافي، اما التحرر من الجوع فهو توفير المتطلبات الساسية والضرورية لبقاء النسان على قيد الحياة"}, {"id": 387, "qnum": 345, "kind": "tf", "prompt": "التحرر من الجوع يعني توفر الغذاء بكمية ونوعية تكفيان لتلبية الحتياجات التغذوية للفراد خلو الغذاء من المواد الضارة وكونه مقبول في سياق ثقافي معين", "options": ["صح", "خطأ"], "correctIndex": 1, "explanation": "هذا تعريف الحق في الغذاء الكافي، اما التحرر من الجوع فهو توفير المتطلبات الساسية والضرورية لبقاء النسان على قيد الحياة"}, {"id": 388, "qnum": 346, "kind": "tf", "prompt": "الدولة ملزمة باتخاذ تدابير لضمان عدم قيام افراد او شركات بحرمان الفراد من الحصول على الغذاء الكافي، كما انها ملزمة باعتماد استراتيجية وطنية لضمان المن الغذائي والتغذوي للجميع", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}, {"id": 389, "qnum": 347, "kind": "tf", "prompt": "صدر مرسوم بقانون في مملكة البحرين بشأن تحديد السعار والرقابة عليها ليبين الحكام المتعلقة بالرقابة على السواق والتقيد فيها ومنع الحتكار كما قامت بصرف علوة الغلء للمواطنين بما يؤمن لهم القدر الكافي للحصول على الغذاء", "options": ["صح", "خطأ"], "correctIndex": 0, "explanation": null}];
+
+
+/* ===== STATE ===== */
+let currentSet = [];       // active list of quiz items for this session
+let currentIndex = 0;
+let answers = {};          // id -> {selectedIndex, isCorrect(bool|null)}
+let mode = 'all';
+
+function startQuiz(m){
+  mode = m;
+  if(m === 'all') currentSet = QUIZ_DATA.slice();
+  else currentSet = QUIZ_DATA.filter(q => q.kind === m);
+  currentIndex = 0;
+  answers = {};
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-results').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  const labelMap = {all:'الاختبار الكامل', tf:'صح / خطأ', mc:'اختيار من متعدد (مراجعة)'};
+  document.getElementById('quiz-mode-label').innerText = labelMap[m];
+  document.getElementById('q-total').innerText = currentSet.length;
+  document.getElementById('jump-input').max = currentSet.length;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const item = currentSet[currentIndex];
+  document.getElementById('q-index').innerText = currentIndex+1;
+  document.getElementById('progress-fill').style.width = ((currentIndex)/currentSet.length*100)+'%';
+
+  const pill = document.getElementById('kind-pill');
+  if(item.kind === 'tf'){
+    pill.innerText = 'صح / خطأ — سؤال رقم ' + item.qnum;
+    pill.className = 'kind-pill tf';
+  } else if(item.kind === 'mc'){
+    pill.innerText = 'اختيار من متعدد — سؤال رقم ' + item.qnum;
+    pill.className = 'kind-pill mc';
+  } else {
+    pill.innerText = 'اختيار من متعدد (بدون مفتاح) — سؤال رقم ' + item.qnum;
+    pill.className = 'kind-pill mc';
+  }
+
+  const gc = document.getElementById('group-context');
+  if(item.group){
+    gc.innerText = item.group;
+    gc.classList.remove('hidden');
+  } else {
+    gc.classList.add('hidden');
+  }
+
+  document.getElementById('q-prompt').innerText = item.prompt;
+
+  const optsWrap = document.getElementById('q-options');
+  optsWrap.innerHTML = '';
+  const prevAnswer = answers[item.id];
+
+  item.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerText = opt;
+    btn.onclick = () => selectOption(idx);
+    optsWrap.appendChild(btn);
+  });
+
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  if(prevAnswer !== undefined){
+    applyAnswerVisuals(item, prevAnswer.selectedIndex);
+  }
+
+  document.getElementById('btn-prev').disabled = currentIndex === 0;
+  document.getElementById('btn-next').disabled = prevAnswer === undefined;
+  document.getElementById('btn-next').innerText = (currentIndex === currentSet.length-1) ? 'عرض النتيجة' : 'التالي';
+}
+
+function selectOption(idx){
+  const item = currentSet[currentIndex];
+  if(answers[item.id] !== undefined) return; // already answered, locked
+
+  let isCorrect = null;
+  if(item.kind === 'tf' || item.kind === 'mc'){
+    isCorrect = (idx === item.correctIndex);
+  }
+  answers[item.id] = {selectedIndex: idx, isCorrect: isCorrect};
+  applyAnswerVisuals(item, idx);
+  document.getElementById('btn-next').disabled = false;
+}
+
+function applyAnswerVisuals(item, selectedIdx){
+  const optsWrap = document.getElementById('q-options');
+  const btns = optsWrap.querySelectorAll('.option');
+  const fb = document.getElementById('q-feedback');
+
+  btns.forEach((b, idx) => {
+    b.classList.add('locked');
+    if(item.kind === 'tf' || item.kind === 'mc'){
+      if(idx === item.correctIndex){
+        b.classList.add('correct');
+      } else if(idx === selectedIdx){
+        b.classList.add('incorrect');
+      } else {
+        b.classList.add('dim');
+      }
+    } else {
+      if(idx === selectedIdx){
+        b.classList.add('selected');
+      } else {
+        b.classList.add('dim');
+      }
+    }
+  });
+
+  fb.classList.add('show');
+  if(item.kind === 'tf' || item.kind === 'mc'){
+    const correct = selectedIdx === item.correctIndex;
+    fb.className = 'feedback show ' + (correct ? 'good' : 'bad');
+    let text = correct ? '✔ إجابة صحيحة.' : ('✘ إجابة خاطئة — الصحيح: ' + item.options[item.correctIndex]);
+    if(item.explanation){ text += '<br><span style="font-weight:400">' + item.explanation + '</span>'; }
+    fb.innerHTML = text;
+  } else {
+    fb.className = 'feedback show neutral';
+    fb.innerHTML = '⚠ لم يظهر أي تظليل واضح لهذا السؤال في الملف الأصلي — راجعه مع محاضراتك أو كتاب المادة.';
+  }
+}
+
+function goNext(){
+  if(currentIndex < currentSet.length - 1){
+    currentIndex++;
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+function goPrev(){
+  if(currentIndex > 0){
+    currentIndex--;
+    renderQuestion();
+  }
+}
+function jumpTo(){
+  const v = parseInt(document.getElementById('jump-input').value, 10);
+  if(v >= 1 && v <= currentSet.length){
+    currentIndex = v-1;
+    renderQuestion();
+  }
+}
+
+function finishQuiz(){
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-results').classList.remove('hidden');
+
+  const gradedItems = currentSet.filter(q => q.kind === 'tf' || q.kind === 'mc');
+  const ungradedItems = currentSet.filter(q => q.kind === 'mc_ungraded');
+
+  let correctCount = 0;
+  let answeredTf = 0;
+  gradedItems.forEach(it => {
+    const a = answers[it.id];
+    if(a !== undefined){
+      answeredTf++;
+      if(a.isCorrect) correctCount++;
+    }
+  });
+
+  const total = gradedItems.length;
+  const pct = total ? Math.round(correctCount/total*100) : 0;
+
+  document.getElementById('score-num').innerText = correctCount + '/' + total;
+  document.getElementById('score-pct').innerText = pct + '%';
+  document.getElementById('score-caption').innerHTML = total
+     ? ('أجبت على <b>' + answeredTf + '</b> من أصل <b>' + total + '</b> سؤال مُصحَّح')
+     : 'لا توجد أسئلة مُصحَّحة في هذه الجلسة';
+
+  const circumference = 2 * Math.PI * 66;
+  const offset = circumference - (pct/100)*circumference;
+  const ring = document.getElementById('ring-fg');
+  ring.setAttribute('stroke-dasharray', circumference);
+  ring.setAttribute('stroke-dashoffset', total ? offset : circumference);
+
+  const mcBlock = document.getElementById('mc-summary-block');
+  const answeredMc = ungradedItems.filter(it => answers[it.id] !== undefined).length;
+  if(ungradedItems.length){
+    mcBlock.classList.remove('hidden');
+    mcBlock.innerHTML = 'أجبت أيضاً على <b>' + answeredMc + '</b> من أصل <b>' + ungradedItems.length + '</b> سؤال بدون تظليل واضح في المصدر (غير محتسب في النتيجة) — راجعه مع محاضراتك.';
+  } else {
+    mcBlock.classList.add('hidden');
+  }
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  const wrongOnes = gradedItems.filter(it => answers[it.id] && !answers[it.id].isCorrect);
+
+  const reviewBlock = document.getElementById('review-wrong-block');
+  if(wrongOnes.length === 0){
+    reviewBlock.classList.add('hidden');
+  } else {
+    reviewBlock.classList.remove('hidden');
+    wrongOnes.forEach(it => {
+      const a = answers[it.id];
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      let html = '<div class="q">س' + it.qnum + '. ' + it.prompt + '</div>';
+      html += '<div class="row your">إجابتك: ' + it.options[a.selectedIndex] + '</div>';
+      html += '<div class="row correct">الصحيح: ' + it.options[it.correctIndex] + '</div>';
+      if(it.explanation){
+        html += '<div class="expl">' + it.explanation + '</div>';
+      }
+      div.innerHTML = html;
+      reviewList.appendChild(div);
+    });
+  }
+}
+
+function resetToStart(){
+  document.getElementById('screen-results').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-start').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
